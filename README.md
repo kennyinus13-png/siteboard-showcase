@@ -38,7 +38,7 @@ Open the HTML files directly in a browser, no build step.
 
 ## Design a template, earn a share
 
-I'm a solo builder. If you design a template that gets added to the shop, you get a designer credit on its product page and **2% of that template's sales**. Details in [CONTRIBUTING.md](CONTRIBUTING.md).
+I'm a solo builder. If you design a template that gets added to the shop, you get a designer credit on its product page and **45% of that template's sales**. Details in [CONTRIBUTING.md](CONTRIBUTING.md).
 
 ## Stack
 

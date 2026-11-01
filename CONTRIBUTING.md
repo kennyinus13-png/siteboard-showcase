@@ -5,7 +5,7 @@
 - You design a complete single-page website template for one industry.
 - If it's accepted and listed on [siteboardhq.com](https://siteboardhq.com):
   - **Credit**: your name and a link on the template's product page.
-  - **Revenue share**: **2% of net sales** of that template (after Stripe fees and refunds), paid **quarterly** via PayPal or bank transfer. I send you a sales report with each payout.
+  - **Revenue share**: **45% of net sales** of that template (after Stripe fees and refunds), paid **quarterly** via PayPal or bank transfer. I send you a sales report with each payout.
 - You keep the right to show the work in your own portfolio.
 - Not accepted? You keep everything; nothing is used.
 
