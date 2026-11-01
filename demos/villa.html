@@ -1,0 +1,619 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='6' fill='%2316181c'/%3E%3Ctext x='16' y='22' text-anchor='middle' font-family='Arial' font-weight='700' font-size='18' fill='white'%3ED%3C/text%3E%3C/svg%3E">
+<meta name="description" content="Dune House is a group of private pool villas on Scenic Highway 30A in Santa Rosa Beach, Florida, booked directly with the owners.">
+<title>Dune House | Private pool villas on the 30A dune coast</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Spectral:wght@400;500&family=Source+Sans+3:wght@400;500;600&display=swap">
+<style>
+/* Dune House. Editorial layout: one full-bleed photo with the title and the booking bar on it, then a narrow text column and large photos.
+   Type ladder 13 / 16 / 20 / 30 / 58. Surfaces: page, panel, raised. One filled button on the page: "Check availability". Photos: Unsplash. */
+:root { --page: #10191f; --panel: #16222a; --raised: #1c2a33; --t1: #f3ede3; --t2: #cfc8bb; --t3: #9a9488; --t4: #6f6a61; --line: rgba(243, 237, 227, .12); --sand: #e8dccb;
+  --serif: "Spectral", Georgia, "Times New Roman", serif; --sans: "Source Sans 3", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; color-scheme: dark; }
+*, *::before, *::after { box-sizing: border-box; }
+html { -webkit-text-size-adjust: 100%; }
+body { margin: 0; background: var(--page); color: var(--t2); font: 400 16px/1.6 var(--sans); overflow-x: clip; }
+h1, h2, h3, p, ul, dl, dd, figure, address { margin: 0; }
+ul { padding: 0; list-style: none; }
+address { font-style: normal; }
+img { display: block; max-width: 100%; height: auto; }
+[hidden] { display: none !important; }
+a { color: var(--sand); text-decoration: underline; text-decoration-color: rgba(232, 220, 203, .45); text-decoration-thickness: 1px; text-underline-offset: 4px; }
+a:hover { color: var(--t1); text-decoration-color: currentColor; }
+:focus-visible { outline: 2px solid var(--sand); outline-offset: 3px; }
+.wrap { max-width: 1168px; margin-inline: auto; padding-inline: 24px; }
+h2 { font: 500 30px/1.2 var(--serif); letter-spacing: -.01em; color: var(--t1); }
+h3 { font: 500 20px/1.3 var(--serif); color: var(--t1); }
+.sub { margin-top: 12px; max-width: 640px; }
+main > section { padding: 96px 0; }
+
+/* Header: clear over the photo, a solid bar with a hairline after it. */
+.hdr { position: fixed; top: 0; left: 0; right: 0; z-index: 20; height: 72px; border-bottom: 1px solid transparent; }
+.hdr.solid, .hdr.open { background: var(--page); border-bottom-color: var(--line); }
+.hdr .wrap { display: flex; align-items: center; justify-content: space-between; gap: 24px; height: 100%; }
+.mark { display: inline-flex; align-items: center; height: 44px; font: 500 20px/1 var(--serif); color: var(--t1); text-decoration: none; }
+.nav { display: flex; gap: 32px; }
+.nav a { display: inline-flex; align-items: center; height: 44px; font-weight: 500; color: var(--t1); text-decoration: none; }
+.hdr.solid .nav a { color: var(--t2); }
+.nav a:hover, .hdr.solid .nav a:hover { color: var(--t1); text-decoration: underline; text-underline-offset: 8px; }
+.menu { display: none; align-items: center; height: 40px; padding: 0 16px; border: 1px solid rgba(243, 237, 227, .45); border-radius: 2px; background: transparent; color: var(--t1); font: 500 16px/1 var(--sans); cursor: pointer; }
+.menu:hover { border-color: var(--t1); }
+
+/* First screen: photo, linear dark scrim, title bottom left, booking bar across the bottom. */
+.hero { position: relative; isolation: isolate; display: flex; flex-direction: column; justify-content: flex-end; min-height: 750px; min-height: min(100svh, 880px); }
+main > section.hero { padding: 136px 0 32px; }
+.hero > .wrap { width: 100%; }
+.hero > img { position: absolute; inset: 0; z-index: -2; width: 100%; height: 100%; object-fit: cover; object-position: 50% 30%; }
+.hero::before { content: ""; position: absolute; inset: 0; z-index: -1; background: linear-gradient(rgba(16, 25, 31, .66), rgba(16, 25, 31, .28) 24%, rgba(16, 25, 31, .76) 56%, rgba(16, 25, 31, .96)); }
+h1 { max-width: 760px; font: 400 58px/1.05 var(--serif); letter-spacing: -.02em; color: var(--t1); text-wrap: balance; }
+.book { display: grid; grid-template-columns: 1fr 1fr .62fr 1.15fr auto auto; margin-top: 32px; background: var(--panel); border: 1px solid var(--line); border-radius: 2px; box-shadow: 0 1px 2px rgba(0, 0, 0, .24), 0 16px 40px rgba(0, 0, 0, .32); }
+.f { display: flex; flex-direction: column; gap: 4px; min-width: 0; padding: 16px 24px; border-right: 1px solid var(--line); font-size: 13px; font-weight: 500; line-height: 18px; color: var(--t3); cursor: pointer; }
+.f:hover { background: var(--raised); }
+.f:focus-within { background: var(--raised); box-shadow: inset 0 0 0 2px var(--sand); }
+.f input, .f select { width: 100%; min-width: 0; height: 28px; padding: 0; border: 0; border-radius: 0; background: transparent; color: var(--t1); font: 400 16px/28px var(--sans); outline: 0; cursor: pointer; }
+.f select option { background: var(--panel); color: var(--t1); }
+.sum { display: flex; flex-direction: column; justify-content: center; min-width: 168px; padding: 8px 24px; }
+.sum b { font: 400 30px/1.15 var(--serif); font-variant-numeric: lining-nums tabular-nums; color: var(--t1); }
+.sum span { font-size: 13px; line-height: 18px; color: var(--t3); }
+.go { display: flex; align-items: center; padding: 0 24px 0 0; }
+.btn { height: 44px; padding: 0 24px; border: 1px solid var(--sand); border-radius: 2px; background: var(--sand); color: #10191f; font: 500 16px/1 var(--sans); white-space: nowrap; cursor: pointer; }
+.btn:hover { background: var(--t1); border-color: var(--t1); }
+.btn:focus-visible { outline-color: var(--t1); }
+.under { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 4px 24px; margin-top: 12px; font-size: 13px; line-height: 20px; color: var(--t2); }
+#held { font-weight: 500; color: var(--t1); }
+
+/* The place: one narrow column, then a wide photo. */
+.col { max-width: 688px; margin-inline: auto; padding-inline: 24px; }
+.col h2 + p { margin-top: 24px; }
+.col p + p { margin-top: 16px; }
+.lead { font-size: 20px; line-height: 1.5; color: var(--t1); }
+.sig { font-size: 13px; color: var(--t3); }
+.wide { margin-top: 64px; }
+.wide img { width: 100%; aspect-ratio: 2 / 1; object-fit: cover; object-position: 50% 72%; border-radius: 2px; }
+figcaption { margin-top: 12px; font-size: 13px; color: var(--t3); }
+
+/* Villas: one entry each, photo side alternates. */
+.villa { display: grid; grid-template-columns: repeat(12, minmax(0, 1fr)); column-gap: 24px; align-items: center; margin-top: 96px; }
+.sub + .villa { margin-top: 64px; }
+.villa .ph { grid-column: 1 / 8; grid-row: 1; width: 100%; aspect-ratio: 3 / 2; object-fit: cover; border-radius: 2px; }
+.villa .tx { grid-column: 9 / 13; grid-row: 1; }
+.villa.flip .ph { grid-column: 8 / 13; aspect-ratio: 4 / 5; }
+.villa.flip .tx { grid-column: 1 / 6; }
+.villa h3 { display: flex; align-items: baseline; justify-content: space-between; gap: 16px; }
+.villa h3 span { font: 400 16px/1.3 var(--sans); color: var(--t2); }
+.villa .tx > p { margin-top: 12px; }
+.facts { margin-top: 24px; border-top: 1px solid var(--line); }
+.facts div { display: grid; grid-template-columns: 112px 1fr; gap: 16px; padding: 8px 0; border-bottom: 1px solid var(--line); }
+.facts dt { color: var(--t3); }
+.facts dd { color: var(--t1); }
+.pick { display: inline-block; padding: 8px 0; }
+.rates-head { margin-top: 96px; scroll-margin-top: 104px; }
+.scroll { margin-top: 16px; overflow-x: auto; }
+table { width: 100%; border-collapse: collapse; font-variant-numeric: lining-nums tabular-nums; }
+th, td { padding: 12px 24px 12px 0; text-align: left; vertical-align: top; border-bottom: 1px solid var(--line); font-weight: 400; }
+thead th { padding-bottom: 8px; font-size: 13px; font-weight: 500; color: var(--t3); vertical-align: bottom; }
+tbody th { font-weight: 600; color: var(--t1); }
+.rates { min-width: 760px; }
+.rates .r { padding: 12px 0 12px 24px; text-align: right; }
+.rates thead .r { padding-bottom: 8px; }
+.rates td.r { color: var(--t1); }
+.note { margin-top: 16px; max-width: 640px; }
+
+/* Included: two columns of plain rows. */
+.incl { display: grid; grid-template-columns: 1fr 1fr; column-gap: 64px; margin-top: 48px; border-bottom: 1px solid var(--line); }
+.incl div { padding: 16px 0 24px; border-top: 1px solid var(--line); }
+.incl dt { font-weight: 600; color: var(--t1); }
+.incl dd { max-width: 440px; }
+
+/* After dark: text on the page grid, photo running out to the right edge. */
+main > section.band { display: grid; grid-template-columns: minmax(24px, 1fr) minmax(0, 560px) minmax(0, 560px) minmax(24px, 1fr); padding: 0; background: var(--panel); }
+.band .tx { grid-column: 2; padding: 96px 64px 96px 0; }
+.band .tx p { margin-top: 16px; }
+.band .tx h2 + p { margin-top: 24px; }
+.band .ph { grid-column: 3 / 5; position: relative; min-height: 480px; }
+.band .ph img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
+
+/* Nearby: sketch map with pins, list beside it, small card on hover or focus. */
+.near { display: grid; grid-template-columns: repeat(12, minmax(0, 1fr)); column-gap: 24px; align-items: start; margin-top: 48px; }
+.map { grid-column: 1 / 8; position: relative; background: var(--panel); border: 1px solid var(--line); border-radius: 2px; }
+.map svg { display: block; width: 100%; height: auto; border-radius: 2px; }
+.map .sea { fill: var(--page); }
+.map .land { fill: var(--raised); }
+.map .lake { fill: var(--page); }
+.map .beach { fill: none; stroke: rgba(232, 220, 203, .5); stroke-width: 3; }
+.map .road { fill: none; stroke: rgba(243, 237, 227, .28); stroke-width: 1.5; }
+.map .path { fill: none; stroke: rgba(243, 237, 227, .4); stroke-width: 1.5; stroke-dasharray: 2 5; }
+.map text { font: 400 13px var(--sans); fill: var(--t2); }
+.map .geo { fill: var(--t3); }
+.pin { cursor: pointer; outline: 0; }
+.pin .dot { transform-box: fill-box; transform-origin: center; }
+.pin .dot circle { fill: var(--sand); stroke: var(--page); stroke-width: 2; }
+.pin .dot text { font-weight: 600; fill: #10191f; }
+.pin.home .dot circle { fill: var(--page); stroke: var(--sand); }
+.pin.home .dot .core { fill: var(--sand); stroke: none; }
+.pin.home > text { font-weight: 600; fill: var(--t1); }
+.pin.on .dot circle, .pin:focus-visible .dot circle { stroke: var(--t1); }
+.pin.on > text, .pin:focus-visible > text { fill: var(--t1); }
+.card { position: absolute; z-index: 2; width: 232px; padding: 12px 16px; background: var(--raised); border: 1px solid rgba(243, 237, 227, .22); border-radius: 2px; box-shadow: 0 1px 2px rgba(0, 0, 0, .3), 0 12px 32px rgba(0, 0, 0, .42); pointer-events: none; }
+.card b { display: block; font-weight: 600; color: var(--t1); }
+.card span { display: block; font-size: 13px; line-height: 1.5; color: var(--t2); }
+.side-list { grid-column: 9 / 13; }
+.hint { font-size: 13px; color: var(--t3); }
+.places { margin-top: 12px; border-top: 1px solid var(--line); }
+.places li { border-bottom: 1px solid var(--line); }
+.places button { display: grid; grid-template-columns: 16px 1fr auto; gap: 12px; align-items: baseline; width: 100%; min-height: 48px; padding: 12px 8px; border: 0; border-radius: 0; background: none; color: var(--t2); font: inherit; text-align: left; cursor: pointer; }
+.places button:hover, .places button:focus-visible { background: var(--panel); }
+.places i { font-style: normal; font-size: 13px; font-variant-numeric: lining-nums tabular-nums; color: var(--t3); }
+.places b { font-weight: 500; color: var(--t1); }
+.places span { font-size: 13px; color: var(--t3); }
+
+/* Good to know: heading at the side, policies table. */
+.split { display: grid; grid-template-columns: repeat(12, minmax(0, 1fr)); column-gap: 24px; align-items: start; }
+.split .side { grid-column: 1 / 5; }
+.split .side p { margin-top: 12px; }
+.rules { grid-column: 6 / 13; border-top: 1px solid var(--line); }
+.rules th { width: 168px; }
+.rules td { padding-right: 0; }
+
+/* Getting here: columns divided by hairlines. */
+.way { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); margin-top: 48px; padding-top: 24px; border-top: 1px solid var(--line); }
+.way div { padding: 0 24px; border-left: 1px solid var(--line); }
+.way div:first-child { padding-left: 0; border-left: 0; }
+.way dt { font-size: 13px; font-weight: 500; color: var(--t3); }
+.way dd b { display: block; margin: 8px 0; font: 500 20px/1.3 var(--serif); color: var(--t1); }
+
+/* Footer. */
+.foot { padding: 64px 0 32px; border-top: 1px solid var(--line); }
+.cols { display: grid; grid-template-columns: 2fr 1fr 1fr 1fr; gap: 32px 24px; }
+.org address, .org p { margin-top: 8px; }
+.cols h3 { font: 500 13px/1.6 var(--sans); color: var(--t3); }
+.cols li a { display: inline-block; padding: 8px 0; color: var(--t2); text-decoration-color: rgba(243, 237, 227, .25); }
+.cols li a:hover { color: var(--t1); text-decoration-color: currentColor; }
+.legal { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 8px 24px; margin-top: 48px; padding-top: 24px; border-top: 1px solid var(--line); font-size: 13px; color: var(--t3); }
+.legal p:last-child { color: var(--t4); }
+
+@media (max-width: 1100px) {
+  .book { grid-template-columns: 1fr 1fr .62fr 1.15fr; }
+  .f { border-bottom: 1px solid var(--line); }
+  .f:nth-of-type(4) { border-right: 0; }
+  .sum { grid-column: 1 / 3; padding: 12px 24px; }
+  .go { grid-column: 3 / 5; justify-content: flex-end; }
+}
+@media (max-width: 960px) {
+  .villa, .villa.flip { display: block; margin-top: 64px; }
+  .villa .ph, .villa.flip .ph { aspect-ratio: 3 / 2; }
+  .villa .tx { margin-top: 24px; max-width: 640px; }
+  .rates-head { margin-top: 64px; }
+  main > section.band { display: block; }
+  .band .ph { min-height: 0; aspect-ratio: 16 / 9; }
+  .band .tx { max-width: 688px; padding: 64px 24px; }
+  .near, .split { display: block; }
+  .side-list, .rules { margin-top: 32px; }
+  .way { grid-template-columns: 1fr 1fr; row-gap: 32px; }
+  .way div:nth-child(odd) { padding-left: 0; border-left: 0; }
+  .cols { grid-template-columns: repeat(3, 1fr); }
+  .org { grid-column: 1 / -1; }
+}
+@media (max-width: 720px) {
+  main > section { padding: 64px 0; }
+  .menu { display: inline-flex; }
+  .nav { display: none; position: absolute; top: 100%; left: 0; right: 0; flex-direction: column; gap: 0; padding: 0 24px 8px; background: var(--page); border-bottom: 1px solid var(--line); }
+  .hdr.open .nav { display: flex; }
+  .nav a, .hdr.solid .nav a { height: 48px; border-top: 1px solid var(--line); color: var(--t1); }
+  .wide { margin-top: 48px; }
+  .wide img { aspect-ratio: 3 / 2; }
+  .book { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+  .f { grid-column: span 2; padding: 12px 16px; }
+  .f:nth-of-type(2) { border-right: 0; }
+  .f:nth-of-type(3) { grid-column: span 1; }
+  .f:nth-of-type(4) { grid-column: span 3; }
+  .sum { grid-column: span 2; min-width: 0; padding: 12px 16px; }
+  .go { grid-column: span 2; padding: 0 12px 0 0; }
+  .btn { padding: 0 12px; }
+  .under { display: block; }
+}
+@media (max-width: 600px) {
+  .wrap, .col { padding-inline: 16px; }
+  .nav { padding-inline: 16px; }
+  .hero { min-height: 0; }
+  main > section.hero { padding: 184px 0 24px; }
+  .hero > img { object-position: 38% 30%; }
+  .hero::before { background: linear-gradient(rgba(16, 25, 31, .7), rgba(16, 25, 31, .5) 16%, rgba(16, 25, 31, .82) 36%, rgba(16, 25, 31, .96) 60%); }
+  h1 { font-size: 30px; line-height: 1.15; }
+  .book { margin-top: 24px; }
+  .incl { grid-template-columns: 1fr; }
+  .band .tx { padding: 48px 16px 64px; }
+  .map .lbl { display: none; }
+  .pin .dot { transform: scale(1.7); }
+  .rules th { width: 112px; }
+  .way { grid-template-columns: 1fr; row-gap: 0; padding-top: 0; }
+  .way div { padding: 16px 0; border-left: 0; border-bottom: 1px solid var(--line); }
+  .cols { grid-template-columns: 1fr 1fr; }
+}
+</style>
+<style id="sb-motion">
+/* siteboard scroll reveal: sections fade in once, 12px rise, nothing else. */
+.sb-mo [data-sb-mo] { transition: opacity .45s ease, transform .45s ease; }
+.sb-mo [data-sb-mo]:not(.sb-in) { opacity: 0; transform: translateY(12px); }
+@media (prefers-reduced-motion: reduce) { .sb-mo [data-sb-mo] { transition: none; } .sb-mo [data-sb-mo]:not(.sb-in) { opacity: 1; transform: none; } }
+</style>
+<style id="sb-divide">
+/* siteboard: a hairline midway between two neighbouring sections that share a background. Written by divide.mjs. */
+@media (max-width:599.98px){
+body>main:nth-child(2)>section:nth-child(2){--sb-line:32px;background-image:linear-gradient(color-mix(in srgb,currentColor 16%,transparent),color-mix(in srgb,currentColor 16%,transparent));background-repeat:no-repeat;background-size:100% 1px;background-position:0 32px}
+body>main:nth-child(2)>section:nth-child(3){--sb-line:0px;background-image:linear-gradient(color-mix(in srgb,currentColor 16%,transparent),color-mix(in srgb,currentColor 16%,transparent));background-repeat:no-repeat;background-size:100% 1px;background-position:0 0px}
+body>main:nth-child(2)>section:nth-child(4){--sb-line:0px;background-image:linear-gradient(color-mix(in srgb,currentColor 16%,transparent),color-mix(in srgb,currentColor 16%,transparent));background-repeat:no-repeat;background-size:100% 1px;background-position:0 0px}
+body>main:nth-child(2)>section:nth-child(7){--sb-line:0px;background-image:linear-gradient(color-mix(in srgb,currentColor 16%,transparent),color-mix(in srgb,currentColor 16%,transparent));background-repeat:no-repeat;background-size:100% 1px;background-position:0 0px}
+body>main:nth-child(2)>section:nth-child(8){--sb-line:0px;background-image:linear-gradient(color-mix(in srgb,currentColor 16%,transparent),color-mix(in srgb,currentColor 16%,transparent));background-repeat:no-repeat;background-size:100% 1px;background-position:0 0px}
+}
+@media (min-width:600px) and (max-width:1023.98px){
+body>main:nth-child(2)>section:nth-child(2){--sb-line:32px;background-image:linear-gradient(color-mix(in srgb,currentColor 16%,transparent),color-mix(in srgb,currentColor 16%,transparent));background-repeat:no-repeat;background-size:100% 1px;background-position:0 32px}
+body>main:nth-child(2)>section:nth-child(3){--sb-line:0px;background-image:linear-gradient(color-mix(in srgb,currentColor 16%,transparent),color-mix(in srgb,currentColor 16%,transparent));background-repeat:no-repeat;background-size:100% 1px;background-position:0 0px}
+body>main:nth-child(2)>section:nth-child(4){--sb-line:0px;background-image:linear-gradient(color-mix(in srgb,currentColor 16%,transparent),color-mix(in srgb,currentColor 16%,transparent));background-repeat:no-repeat;background-size:100% 1px;background-position:0 0px}
+body>main:nth-child(2)>section:nth-child(7){--sb-line:0px;background-image:linear-gradient(color-mix(in srgb,currentColor 16%,transparent),color-mix(in srgb,currentColor 16%,transparent));background-repeat:no-repeat;background-size:100% 1px;background-position:0 0px}
+body>main:nth-child(2)>section:nth-child(8){--sb-line:0px;background-image:linear-gradient(color-mix(in srgb,currentColor 16%,transparent),color-mix(in srgb,currentColor 16%,transparent));background-repeat:no-repeat;background-size:100% 1px;background-position:0 0px}
+}
+@media (min-width:1024px) and (max-width:1439.98px){
+body>main:nth-child(2)>section:nth-child(2){--sb-line:48px;background-image:linear-gradient(color-mix(in srgb,currentColor 16%,transparent),color-mix(in srgb,currentColor 16%,transparent));background-repeat:no-repeat;background-size:100% 1px;background-position:0 48px}
+body>main:nth-child(2)>section:nth-child(3){--sb-line:0px;background-image:linear-gradient(color-mix(in srgb,currentColor 16%,transparent),color-mix(in srgb,currentColor 16%,transparent));background-repeat:no-repeat;background-size:100% 1px;background-position:0 0px}
+body>main:nth-child(2)>section:nth-child(4){--sb-line:0px;background-image:linear-gradient(color-mix(in srgb,currentColor 16%,transparent),color-mix(in srgb,currentColor 16%,transparent));background-repeat:no-repeat;background-size:100% 1px;background-position:0 0px}
+body>main:nth-child(2)>section:nth-child(7){--sb-line:0px;background-image:linear-gradient(color-mix(in srgb,currentColor 16%,transparent),color-mix(in srgb,currentColor 16%,transparent));background-repeat:no-repeat;background-size:100% 1px;background-position:0 0px}
+body>main:nth-child(2)>section:nth-child(8){--sb-line:0px;background-image:linear-gradient(color-mix(in srgb,currentColor 16%,transparent),color-mix(in srgb,currentColor 16%,transparent));background-repeat:no-repeat;background-size:100% 1px;background-position:0 0px}
+}
+@media (min-width:1440px){
+body>main:nth-child(2)>section:nth-child(2){--sb-line:48px;background-image:linear-gradient(color-mix(in srgb,currentColor 16%,transparent),color-mix(in srgb,currentColor 16%,transparent));background-repeat:no-repeat;background-size:100% 1px;background-position:0 48px}
+body>main:nth-child(2)>section:nth-child(3){--sb-line:0px;background-image:linear-gradient(color-mix(in srgb,currentColor 16%,transparent),color-mix(in srgb,currentColor 16%,transparent));background-repeat:no-repeat;background-size:100% 1px;background-position:0 0px}
+body>main:nth-child(2)>section:nth-child(4){--sb-line:0px;background-image:linear-gradient(color-mix(in srgb,currentColor 16%,transparent),color-mix(in srgb,currentColor 16%,transparent));background-repeat:no-repeat;background-size:100% 1px;background-position:0 0px}
+body>main:nth-child(2)>section:nth-child(7){--sb-line:0px;background-image:linear-gradient(color-mix(in srgb,currentColor 16%,transparent),color-mix(in srgb,currentColor 16%,transparent));background-repeat:no-repeat;background-size:100% 1px;background-position:0 0px}
+body>main:nth-child(2)>section:nth-child(8){--sb-line:0px;background-image:linear-gradient(color-mix(in srgb,currentColor 16%,transparent),color-mix(in srgb,currentColor 16%,transparent));background-repeat:no-repeat;background-size:100% 1px;background-position:0 0px}
+}
+</style>
+</head>
+<body>
+<header class="hdr" id="hdr"><div class="wrap">
+  <a class="mark" href="#top">Dune House</a>
+  <button class="menu" id="menu" type="button" aria-expanded="false" aria-controls="nav">Menu</button>
+  <nav class="nav" id="nav" aria-label="Sections"><a href="#villas">Villas</a><a href="#included">Included</a><a href="#nearby">Nearby</a><a href="#know">Good to know</a></nav>
+</div></header>
+<main>
+  <section class="hero" id="top">
+    <img src="img/u/1571896349842-33c89424de2d-1400.jpg" width="1400" height="1400" alt="Villa and pool reflecting the evening sky">
+    <div class="wrap">
+      <h1>Three villas on the dunes, each with its own pool.</h1>
+      <form class="book" id="book">
+        <label class="f">Check-in <input type="date" id="in" required></label>
+        <label class="f">Check-out <input type="date" id="out" required></label>
+        <label class="f">Guests <select id="guests"><option>1</option><option selected>2</option><option>3</option><option>4</option><option>5</option><option>6</option></select></label>
+        <label class="f">Villa <select id="villa"><option value="420" data-high="540" data-name="Dune" data-sleeps="2">Dune · from $420</option><option value="520" data-high="660" data-name="Tide" data-sleeps="4">Tide · from $520</option><option value="680" data-high="860" data-name="Ridge" data-sleeps="6">Ridge · from $680</option></select></label>
+        <div class="sum"><b id="total">$1,680</b><span id="nights">4 nights</span></div>
+        <div class="go"><button class="btn" type="submit">Check availability</button></div>
+      </form>
+      <div class="under">
+        <p>Booked here, not through a platform: no service fee, free date changes.</p>
+        <p id="held" role="status" hidden></p>
+      </div>
+    </div>
+  </section>
+
+  <section id="place">
+    <div class="col">
+      <h2>The place</h2>
+      <p class="lead">Dune House is a row of private villas on the seaward side of Scenic Highway 30A in Santa Rosa Beach, on the dune ridge above the Gulf.</p>
+      <p>Each villa is a separate house with its own gate, kitchen, terrace and pool. A boardwalk runs from the gardens over the dune to the beach, two minutes on foot, where loungers and towels are set out from 08:00 until sunset.</p>
+      <p>We built the first villa in 2014 and still run all of them ourselves. You book with us on this page or by phone. There is no platform in between, so there is no service fee, and you can move your dates free of charge up to 14 days before arrival.</p>
+      <p class="sig">Marguerite and Tom Ellery, owners</p>
+    </div>
+    <figure class="wrap wide">
+      <img src="img/u/1602002418816-5c0aeef426aa-1400.jpg" width="1400" height="1050" alt="Sun loungers under palms on a white beach" loading="lazy">
+      <figcaption>The beach at the end of the boardwalk. Loungers and towels are part of every stay.</figcaption>
+    </figure>
+  </section>
+
+  <section id="villas">
+    <div class="wrap">
+      <h2>Villas and rates</h2>
+      <p class="sub">Prices are per night for the whole villa, not per person. Every villa has a full kitchen, a washer and dryer, its own gate and two parking spaces.</p>
+
+      <article class="villa">
+        <img class="ph" src="img/u/1582719478250-c89cae4dc85b-1400.jpg" width="1400" height="933" alt="Bedroom with linen curtains opening to the garden" loading="lazy">
+        <div class="tx">
+          <h3>Dune <span>from $420 a night</span></h3>
+          <p>For two. One bedroom whose doors and linen curtains open onto the garden, with a 9 m pool along the terrace.</p>
+          <dl class="facts">
+            <div><dt>Sleeps</dt><dd>2</dd></div>
+            <div><dt>Bedrooms</dt><dd>1, king bed</dd></div>
+            <div><dt>Pool</dt><dd>9 m, heated October to April</dd></div>
+            <div><dt>Floor area</dt><dd>68 m² (730 sq ft)</dd></div>
+            <div><dt>Low season</dt><dd>$420 a night</dd></div>
+            <div><dt>High season</dt><dd>$540 a night</dd></div>
+          </dl>
+          <p><a class="pick" href="#top" data-pick="420">Check dates for Dune</a></p>
+        </div>
+      </article>
+
+      <article class="villa flip">
+        <img class="ph" src="img/u/1571003123894-1f0594d2b5d9-1400.jpg" width="1400" height="1812" alt="Pool with curtained cabanas at dusk" loading="lazy">
+        <div class="tx">
+          <h3>Tide <span>from $520 a night</span></h3>
+          <p>For a family or two couples. The bedrooms are at opposite ends of the house, and curtained daybeds stand beside the 12 m pool, which faces west over the water.</p>
+          <dl class="facts">
+            <div><dt>Sleeps</dt><dd>4</dd></div>
+            <div><dt>Bedrooms</dt><dd>2, one king and one twin</dd></div>
+            <div><dt>Pool</dt><dd>12 m, heated October to April</dd></div>
+            <div><dt>Floor area</dt><dd>104 m² (1,120 sq ft)</dd></div>
+            <div><dt>Low season</dt><dd>$520 a night</dd></div>
+            <div><dt>High season</dt><dd>$660 a night</dd></div>
+          </dl>
+          <p><a class="pick" href="#top" data-pick="520">Check dates for Tide</a></p>
+        </div>
+      </article>
+
+      <article class="villa">
+        <img class="ph" src="img/u/1566073771259-6a8506099945-1400.jpg" width="1400" height="933" alt="Wooden villa with sun loungers by the pool" loading="lazy">
+        <div class="tx">
+          <h3>Ridge <span>from $680 a night</span></h3>
+          <p>The largest house, set highest on the ridge. A timber deck runs around the 15 m pool and the outdoor table seats eight.</p>
+          <dl class="facts">
+            <div><dt>Sleeps</dt><dd>6</dd></div>
+            <div><dt>Bedrooms</dt><dd>3, two king and one twin</dd></div>
+            <div><dt>Pool</dt><dd>15 m, heated October to April</dd></div>
+            <div><dt>Floor area</dt><dd>152 m² (1,640 sq ft)</dd></div>
+            <div><dt>Low season</dt><dd>$680 a night</dd></div>
+            <div><dt>High season</dt><dd>$860 a night</dd></div>
+          </dl>
+          <p><a class="pick" href="#top" data-pick="680">Check dates for Ridge</a></p>
+        </div>
+      </article>
+
+      <h3 class="rates-head" id="rates">Rates per night</h3>
+      <div class="scroll" role="region" aria-label="Rates table" tabindex="0">
+        <table class="rates">
+          <thead><tr><th scope="col">Villa</th><th scope="col">Sleeps</th><th scope="col">Bedrooms</th><th scope="col">Pool</th><th scope="col">Floor area</th><th scope="col" class="r">Low season</th><th scope="col" class="r">High season</th><th scope="col" class="r">7 nights, low season</th></tr></thead>
+          <tbody>
+            <tr><th scope="row">Dune</th><td>2</td><td>1</td><td>9 m</td><td>68 m²</td><td class="r">$420</td><td class="r">$540</td><td class="r">$2,646</td></tr>
+            <tr><th scope="row">Tide</th><td>4</td><td>2</td><td>12 m</td><td>104 m²</td><td class="r">$520</td><td class="r">$660</td><td class="r">$3,276</td></tr>
+            <tr><th scope="row">Ridge</th><td>6</td><td>3</td><td>15 m</td><td>152 m²</td><td class="r">$680</td><td class="r">$860</td><td class="r">$4,284</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p class="note">Stays of seven nights or more take 10% off, and the last column already includes it. Low season runs from 1 September to the end of February, high season from 1 March to 31 August.</p>
+    </div>
+  </section>
+
+  <section id="included">
+    <div class="wrap">
+      <h2>Included</h2>
+      <p class="sub">These come with every stay at the nightly rate. None of them is added to the bill.</p>
+      <dl class="incl">
+        <div><dt>Breakfast basket</dt><dd>Bread, fruit, eggs and coffee at the door by 08:00.</dd></div>
+        <div><dt>Airport transfer</dt><dd>40 minutes each way, one car per villa, on arrival and departure.</dd></div>
+        <div><dt>Housekeeping</dt><dd>Daily, at the hour you choose.</dd></div>
+        <div><dt>Bikes and kayaks</dt><dd>Two of each at every villa, with helmets, locks and paddles.</dd></div>
+        <div><dt>Late checkout</dt><dd>Until 14:00 when the villa is free that day.</dd></div>
+        <div><dt>Free date changes</dt><dd>Up to 14 days before arrival, when booked here.</dd></div>
+      </dl>
+    </div>
+  </section>
+
+  <section class="band" id="night">
+    <div class="tx">
+      <h2>After dark</h2>
+      <p class="lead">The pool lights stay on until midnight. After that only the path lights are lit, low and amber, because sea turtles nest on this beach from May to October.</p>
+      <p>A cook comes to the villa at 19:00 if you ask by noon the day before. Dinner is $95 a person and the menu depends on what the boats brought in that morning.</p>
+      <p>There is no reception desk. Text <a href="tel:+18505550193">(850) 555-0193</a> and one of us answers, usually within ten minutes, until 23:00.</p>
+    </div>
+    <div class="ph"><img src="img/u/1551882547-ff40c63fe5fa-1400.jpg" width="1400" height="933" alt="White buildings, pool and palms under a pink evening sky" loading="lazy"></div>
+  </section>
+
+  <section id="nearby">
+    <div class="wrap">
+      <h2>Nearby</h2>
+      <p class="sub">Six places within half an hour. The map is a sketch and is not to scale.</p>
+      <div class="near">
+        <div class="map" id="map">
+          <svg viewBox="0 0 640 420" role="group" aria-label="Sketch map of the coast around Dune House">
+            <rect class="sea" width="640" height="420"/>
+            <path class="land" d="M0 0h640v150c-60 20-110 60-170 70s-120-10-190 20-120 90-190 100S20 360 0 330z"/>
+            <path class="beach" d="M640 150c-60 20-110 60-170 70s-120-10-190 20-120 90-190 100S20 360 0 330"/>
+            <ellipse class="lake" cx="578" cy="148" rx="34" ry="12" transform="rotate(-16 578 148)"/>
+            <path class="road" d="M0 84C120 112 250 96 330 126C400 152 520 112 640 84"/>
+            <path class="road" d="M214 106C206 70 176 48 128 40"/>
+            <path class="path" d="M330 126v38M337 190l12 26"/>
+            <text class="lbl geo" x="20" y="74">Scenic Highway 30A</text>
+            <text class="lbl geo" x="430" y="336">Gulf of Mexico</text>
+            <g class="pin home" data-i="0" data-x="330" data-y="176" data-n="Dune House" data-d="The villas, on the dune ridge between the highway and the beach." transform="translate(330 176)" tabindex="0" role="img" aria-label="Dune House, the villas">
+              <g class="dot"><circle r="12"/><circle class="core" r="5"/></g>
+              <text class="lbl" x="20" y="5">Dune House</text>
+            </g>
+            <g class="pin" data-i="1" data-x="352" data-y="228" data-n="Beach boardwalk" data-d="From the gardens over the dune to the sand. 2 min walk." transform="translate(352 228)" tabindex="0" role="img" aria-label="1, Beach boardwalk, 2 min walk">
+              <g class="dot"><circle r="11"/><text y="4.5" text-anchor="middle">1</text></g>
+              <text class="lbl" x="18" y="5">Beach boardwalk</text>
+            </g>
+            <g class="pin" data-i="2" data-x="240" data-y="130" data-n="Salt &amp; Fig" data-d="Restaurant. Dinner Wednesday to Sunday, 17:30 to 21:30. 6 min walk." transform="translate(240 130)" tabindex="0" role="img" aria-label="2, Salt and Fig restaurant, 6 min walk">
+              <g class="dot"><circle r="11"/><text y="4.5" text-anchor="middle">2</text></g>
+              <text class="lbl" x="18" y="5">Salt &amp; Fig</text>
+            </g>
+            <g class="pin" data-i="3" data-x="428" data-y="100" data-n="Fish market" data-d="Open 07:00 to 12:00, closed Monday. 10 min by bike." transform="translate(428 100)" tabindex="0" role="img" aria-label="3, Fish market, 10 min by bike">
+              <g class="dot"><circle r="11"/><text y="4.5" text-anchor="middle">3</text></g>
+              <text class="lbl" x="18" y="5">Fish market</text>
+            </g>
+            <g class="pin" data-i="4" data-x="546" data-y="158" data-n="Dune lake launch" data-d="Put the kayaks in on the coastal dune lake. 15 min by bike." transform="translate(546 158)" tabindex="0" role="img" aria-label="4, Dune lake launch, 15 min by bike">
+              <g class="dot"><circle r="11"/><text y="4.5" text-anchor="middle">4</text></g>
+              <text class="lbl" x="-18" y="5" text-anchor="end">Dune lake launch</text>
+            </g>
+            <g class="pin" data-i="5" data-x="128" data-y="40" data-n="State forest trailhead" data-d="Sandy trails through longleaf pine, on foot or by bike. 12 min drive." transform="translate(128 40)" tabindex="0" role="img" aria-label="5, State forest trailhead, 12 min drive">
+              <g class="dot"><circle r="11"/><text y="4.5" text-anchor="middle">5</text></g>
+              <text class="lbl" x="18" y="5">State forest trailhead</text>
+            </g>
+            <g class="pin" data-i="6" data-x="64" data-y="120" data-n="Town shops" data-d="Grocery, pharmacy and bike repair. 8 min drive." transform="translate(64 120)" tabindex="0" role="img" aria-label="6, Town shops, 8 min drive">
+              <g class="dot"><circle r="11"/><text y="4.5" text-anchor="middle">6</text></g>
+              <text class="lbl" x="18" y="5">Town shops</text>
+            </g>
+          </svg>
+          <div class="card" id="card" aria-hidden="true" hidden></div>
+        </div>
+        <div class="side-list">
+          <p class="hint">Choose a place to see it on the map.</p>
+          <ul class="places" id="places">
+            <li><button type="button" data-i="1"><i>1</i><b>Beach boardwalk</b><span>2 min walk</span></button></li>
+            <li><button type="button" data-i="2"><i>2</i><b>Salt &amp; Fig</b><span>6 min walk</span></button></li>
+            <li><button type="button" data-i="3"><i>3</i><b>Fish market</b><span>10 min by bike</span></button></li>
+            <li><button type="button" data-i="4"><i>4</i><b>Dune lake launch</b><span>15 min by bike</span></button></li>
+            <li><button type="button" data-i="5"><i>5</i><b>State forest trailhead</b><span>12 min drive</span></button></li>
+            <li><button type="button" data-i="6"><i>6</i><b>Town shops</b><span>8 min drive</span></button></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="know">
+    <div class="wrap split">
+      <div class="side">
+        <h2>Good to know</h2>
+        <p>The house rules in one place. For anything not covered here, call or text <a href="tel:+18505550193">(850) 555-0193</a>.</p>
+      </div>
+      <table class="rules">
+        <tbody>
+          <tr><th scope="row">Check-in</th><td>From 15:00. One of us meets you at the gate with the keys.</td></tr>
+          <tr><th scope="row">Check-out</th><td>By 11:00, or by 14:00 when the villa is free that day.</td></tr>
+          <tr><th scope="row">Deposit</th><td>30% when you book. The balance is due 14 days before arrival.</td></tr>
+          <tr><th scope="row">Cancellation</th><td>Free until 14 days before arrival, with the deposit returned in full.</td></tr>
+          <tr><th scope="row">Children</th><td>Welcome. A cot, a high chair and a pool fence are set up before you arrive if you ask.</td></tr>
+          <tr><th scope="row">Pets</th><td>On request. One dog per villa, with a $40 cleaning charge per stay.</td></tr>
+          <tr><th scope="row">Minimum stay</th><td>2 nights, or 3 nights in July and August.</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <section id="getting-here">
+    <div class="wrap">
+      <h2>Getting here</h2>
+      <dl class="way">
+        <div><dt>Airport</dt><dd><b>Northwest Florida Beaches International (ECP)</b>Send us your flight number when you book and we will follow the arrival time.</dd></div>
+        <div><dt>By car</dt><dd><b>40 minutes from the airport</b>The gate code arrives by text on the morning of your stay. Each villa has two parking spaces.</dd></div>
+        <div><dt>Transfer</dt><dd><b>Included, both ways</b>One car per villa. The driver waits in the arrivals hall with your name on a card.</dd></div>
+        <div><dt>Address</dt><dd><b>2180 Scenic Highway 30A</b><address>Santa Rosa Beach, FL 32459</address><a href="tel:+18505550193">(850) 555-0193</a></dd></div>
+      </dl>
+    </div>
+  </section>
+</main>
+<footer class="foot"><div class="wrap">
+  <div class="cols">
+    <div class="org">
+      <a class="mark" href="#top">Dune House</a>
+      <address>2180 Scenic Highway 30A<br>Santa Rosa Beach, FL 32459</address>
+      <p><a href="tel:+18505550193">(850) 555-0193</a></p>
+    </div>
+    <nav aria-label="Stay"><h3>Stay</h3><ul><li><a href="#villas">Villas and rates</a></li><li><a href="#included">Included</a></li><li><a href="#know">Good to know</a></li></ul></nav>
+    <nav aria-label="Around"><h3>Around</h3><ul><li><a href="#place">The place</a></li><li><a href="#night">After dark</a></li><li><a href="#nearby">Nearby</a></li><li><a href="#getting-here">Getting here</a></li></ul></nav>
+    <nav aria-label="Book"><h3>Book</h3><ul><li><a href="#top">Check availability</a></li><li><a href="#rates">Rates per night</a></li><li><a href="tel:+18505550193">Call or text us</a></li></ul></nav>
+  </div>
+  <div class="legal">
+    <p>© 2026 Dune House LLC. Rates are per villa per night in US dollars and exclude Florida sales tax and county tourist tax.</p>
+    <p>Photos from Unsplash.</p>
+  </div>
+</div></footer>
+<script>
+(() => {
+  const $ = (id) => document.getElementById(id);
+  const still = matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+  // Header: clear over the photo, solid once the photo has passed under it. On phones the links sit behind "Menu".
+  const hdr = $("hdr"), hero = $("top"), menu = $("menu");
+  if (hdr && hero) {
+    const solid = () => hdr.classList.toggle("solid", hero.getBoundingClientRect().bottom <= 72);
+    addEventListener("scroll", solid, { passive: true }); addEventListener("resize", solid); solid();
+  }
+  if (hdr && menu) {
+    const open = (on) => { hdr.classList.toggle("open", on); menu.setAttribute("aria-expanded", String(on)); };
+    menu.addEventListener("click", () => open(!hdr.classList.contains("open")));
+    hdr.querySelectorAll(".nav a").forEach((a) => a.addEventListener("click", () => open(false)));
+  }
+
+  // Booking: every night at its season's rate (March to August is high season), 10% off from seven nights.
+  // The total eases to the new figure when the dates or the villa change. That is the only motion on the page.
+  const form = $("book"), inp = $("in"), out = $("out"), guests = $("guests"), villa = $("villa"), total = $("total"), nights = $("nights"), held = $("held");
+  if (form && inp && out && guests && villa && total && nights && held) {
+    const DAY = 864e5, iso = (t) => new Date(t).toISOString().slice(0, 10), usd = (n) => "$" + Math.round(n).toLocaleString("en-US");
+    const now = Date.now();
+    inp.min = iso(now); inp.max = out.max = iso(now + 540 * DAY); inp.value = iso(now + 14 * DAY); out.value = iso(now + 18 * DAY);
+    let shown = null, raf = 0, quote = null;
+    const paint = (to) => {
+      cancelAnimationFrame(raf);
+      if (still || shown === null) { shown = to; total.textContent = usd(to); return; }
+      const from = shown, t0 = performance.now();
+      const tick = (t) => { const p = Math.min(1, Math.max(0, (t - t0) / 450)); shown = from + (to - from) * (1 - (1 - p) ** 3); total.textContent = usd(shown); if (p < 1) raf = requestAnimationFrame(tick); };
+      raf = requestAnimationFrame(tick);
+    };
+    const sum = () => {
+      const a = Date.parse(inp.value), b = Date.parse(out.value), n = Math.round((b - a) / DAY);
+      const o = villa.options[villa.selectedIndex], name = o.dataset.name, sleeps = +o.dataset.sleeps, low = +o.value, high = +o.dataset.high;
+      if (a) out.min = iso(a + DAY);
+      if (!(n > 0 && n <= 365)) { quote = { bad: "Check-out must be after check-in." }; nights.textContent = "check the dates"; paint(0); return; }
+      let price = 0;
+      for (let t = a; t < b; t += DAY) { const m = new Date(t).getUTCMonth(); price += m >= 2 && m <= 7 ? high : low; }
+      const off = n >= 7; if (off) price *= .9;
+      const least = [6, 7].includes(new Date(a).getUTCMonth()) ? 3 : 2, stay = `${n} night${n > 1 ? "s" : ""}`;
+      quote = { bad: n < least ? `The minimum stay for those dates is ${least} nights.` : +guests.value > sleeps ? `${name} sleeps ${sleeps}. Choose a larger villa for ${guests.value} guests.` : "", text: `${name}, ${stay}, ${usd(price)}` };
+      nights.textContent = stay + (off ? " · 10% off" : "");
+      paint(price);
+    };
+    [inp, out, guests, villa].forEach((e) => e.addEventListener("input", () => { held.hidden = true; sum(); }));
+    sum();
+    form.addEventListener("submit", (e) => { e.preventDefault(); if (!quote) return; held.textContent = quote.bad || quote.text + ". This is a preview, so nothing was sent."; held.hidden = false; });
+    document.querySelectorAll("[data-pick]").forEach((a) => a.addEventListener("click", () => { villa.value = a.dataset.pick; held.hidden = true; sum(); }));
+  }
+
+  // Map: a pin or a list row shows the small card on hover, focus or tap.
+  const map = $("map"), card = $("card"), list = $("places");
+  const svg = map && map.querySelector("svg");
+  if (map && card && list && svg) {
+    const pins = [...svg.querySelectorAll(".pin")], rows = [...list.querySelectorAll("button")];
+    const hide = () => { card.hidden = true; pins.forEach((p) => p.classList.remove("on")); };
+    const show = (i) => {
+      const p = pins.find((x) => x.dataset.i === i); if (!p) return;
+      hide(); p.classList.add("on");
+      const b = document.createElement("b"), s = document.createElement("span"); b.textContent = p.dataset.n; s.textContent = p.dataset.d; card.replaceChildren(b, s); card.hidden = false;
+      const k = svg.getBoundingClientRect().width / 640, x = p.dataset.x * k, y = p.dataset.y * k, w = card.offsetWidth, h = card.offsetHeight;
+      card.style.left = Math.max(8, Math.min(map.clientWidth - w - 8, x - w / 2)) + "px";
+      card.style.top = (y - h - 20 < 8 ? y + 20 : y - h - 20) + "px";
+    };
+    [...pins, ...rows].forEach((e) => {
+      const i = e.dataset.i;
+      ["mouseenter", "focus", "click"].forEach((ev) => e.addEventListener(ev, () => show(i)));
+      ["mouseleave", "blur"].forEach((ev) => e.addEventListener(ev, hide));
+    });
+  }
+})();
+</script>
+<script id="sb-motion">
+(() => {
+  if (matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+  const secs = [...document.querySelectorAll("main section, main > div, body > section, body > div.hero, .sec, body > main > *")].filter((e) => e.children.length && !e.closest("header, footer, nav, dialog, [popover]"));
+  if (!secs.length) secs.push(...[...document.body.children].filter((e) => e.children.length && !e.matches("header, footer, nav, script, style, link, dialog, [popover]")));
+  if (!secs.length) return;
+  const near = (e) => e.getBoundingClientRect().top < innerHeight * .92;
+  const start = () => {
+    secs.forEach((e) => e.setAttribute("data-sb-mo", ""));
+    document.documentElement.classList.add("sb-mo");
+    void document.body.offsetWidth;
+    const reveal = (e) => e.classList.add("sb-in");
+    secs.filter(near).forEach(reveal);
+    const rest = () => secs.filter((e) => !e.classList.contains("sb-in"));
+    if ("IntersectionObserver" in window) {
+      const io = new IntersectionObserver((xs) => xs.forEach((x) => { if (x.isIntersecting) { reveal(x.target); io.unobserve(x.target); } }), { rootMargin: "0px 0px -8% 0px" });
+      rest().forEach((e) => io.observe(e));
+    }
+    const sweep = () => rest().filter(near).forEach(reveal);
+    addEventListener("scroll", sweep, { passive: true }); addEventListener("resize", sweep);
+    setTimeout(sweep, 1500); setTimeout(() => rest().forEach(reveal), 6000);
+  };
+  document.hidden ? addEventListener("visibilitychange", function f() { if (!document.hidden) { removeEventListener("visibilitychange", f); start(); } }) : start();
+})();
+</script>
+</body>
+</html>

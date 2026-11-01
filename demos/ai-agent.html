@@ -1,0 +1,678 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='6' fill='%23ecedf1'/%3E%3Ctext x='16' y='22' text-anchor='middle' font-family='Arial' font-weight='700' font-size='18' fill='white'%3ER%3C/text%3E%3C/svg%3E">
+<meta name="description" content="Relay is an AI agent that reads a team's inbox, tickets and spreadsheets, does a task step by step, and asks before it sends, deletes or pays anything.">
+<title>Relay | AI agent for inbox, ticket and spreadsheet tasks</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@400;500;600&display=swap">
+<style>
+/* Relay. Dark product page: the product window is the hero and the copy stays small.
+   Surfaces: page, panel, raised, inset. Four text tones. One accent (filled button, running dot, focus ring). Amber only for "Needs approval".
+   Type: 13, 16, 20, 30, 54. The product window adds 12. Radius 6px. */
+:root { --bg: #0b0c0e; --panel: #121418; --raised: #181b20; --inset: #0f1114; --line: rgba(255, 255, 255, .08); --line2: rgba(255, 255, 255, .14); --t1: #f2f3f5; --t2: #c5c9d1; --t3: #8b909a; --t4: #62676f; --accent: #c8f55a; --amber: #e5b454; --sans: "IBM Plex Sans", "Segoe UI", Helvetica, Arial, sans-serif; --mono: "IBM Plex Mono", Consolas, Menlo, monospace; color-scheme: dark; }
+* { box-sizing: border-box; }
+[hidden] { display: none !important; }
+html { scroll-padding-top: 80px; }
+body { margin: 0; background: var(--bg); color: var(--t2); font: 400 16px/1.6 var(--sans); overflow-x: clip; -webkit-font-smoothing: antialiased; }
+h1, h2, h3, p, ul, dl, dd { margin: 0; }
+ul { padding: 0; list-style: none; }
+a { color: var(--t2); text-decoration: underline; text-decoration-thickness: 1px; text-underline-offset: 3px; }
+a:hover { color: var(--t1); }
+button { font: inherit; color: inherit; }
+:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+.wrap { max-width: 1200px; margin-inline: auto; padding-inline: 24px; }
+
+/* Header: wordmark, text links, a text "Sign in". The one filled button lives in the hero. */
+.top { position: sticky; top: 0; z-index: 9; border-bottom: 1px solid var(--line); background: rgba(11, 12, 14, .9); backdrop-filter: blur(12px); }
+.top .wrap { display: flex; align-items: center; gap: 40px; height: 64px; }
+.logo { font: 600 20px/1 var(--sans); letter-spacing: -.01em; color: var(--t1); text-decoration: none; }
+.top nav { display: flex; gap: 28px; margin-right: auto; }
+.top nav a, .signin { font-size: 13px; font-weight: 500; line-height: 40px; color: var(--t3); text-decoration: none; }
+.signin { color: var(--t2); }
+.top nav a:hover, .signin:hover { color: var(--t1); }
+
+/* Buttons: filled (one per screenful), outlined, and the small ones inside the product mock. */
+.btn { display: inline-flex; align-items: center; justify-content: center; min-height: 44px; padding: 0 20px; border: 1px solid var(--accent); border-radius: 6px; background: var(--accent); color: #0b0c0e; font: 500 16px/1 var(--sans); text-decoration: none; white-space: nowrap; cursor: pointer; }
+.btn:hover { border-color: #d9fa8a; background: #d9fa8a; color: #0b0c0e; }
+.btn.line { border-color: var(--line2); background: transparent; color: var(--t1); }
+.btn.line:hover { border-color: rgba(255, 255, 255, .32); background: rgba(255, 255, 255, .05); color: var(--t1); }
+.btn.sm { min-height: 32px; padding: 0 12px; font: 500 13px/1 var(--mono); }
+.arrow::after { content: "\2192"; display: inline-block; margin-left: 6px; }
+
+/* Hero: a short headline, one sentence, one button, then the product. */
+.hero { padding: 48px 0 96px; }
+h1 { max-width: 17em; font: 500 54px/1.06 var(--sans); letter-spacing: -.02em; color: var(--t1); text-wrap: balance; }
+.lead { max-width: 44em; margin-top: 16px; }
+.acts { display: flex; flex-wrap: wrap; align-items: center; gap: 8px 24px; margin-top: 24px; }
+.acts .arrow { line-height: 44px; }
+
+/* Product window. Page > panel (window) > raised (title bar, selected row, result) and inset (rail, status bar). */
+.win { margin-top: 48px; overflow: hidden; border: 1px solid var(--line2); border-radius: 6px; background: var(--panel); box-shadow: 0 1px 2px rgba(0, 0, 0, .4), 0 16px 40px rgba(0, 0, 0, .4); font: 400 13px/1.5 var(--mono); }
+.win *, .win *::before, .win *::after { transition: none !important; } /* states in the window switch at once, nothing fades */
+.win-top { display: flex; align-items: center; justify-content: space-between; gap: 16px; height: 40px; padding: 0 16px; border-bottom: 1px solid var(--line); background: var(--raised); font-size: 12px; color: var(--t3); white-space: nowrap; }
+.win-body { display: grid; grid-template-columns: 304px minmax(0, 1fr); }
+.rail { border-right: 1px solid var(--line); background: var(--inset); }
+.rail-h { display: flex; justify-content: space-between; padding: 12px 16px 10px; font-size: 12px; color: var(--t3); }
+.rail-h span + span { color: var(--t4); }
+.rail button { display: block; width: 100%; padding: 10px 16px; border: 0; border-top: 1px solid var(--line); background: transparent; text-align: left; cursor: pointer; }
+.rail button:hover { background: rgba(255, 255, 255, .03); }
+.rail button[aria-current="true"] { background: var(--raised); box-shadow: inset 2px 0 0 var(--t1); }
+.rail button:focus-visible { outline-offset: -2px; }
+.rail .r { display: flex; justify-content: space-between; gap: 12px; }
+.rail .r + .r { margin-top: 2px; }
+.nm { overflow: hidden; color: var(--t2); white-space: nowrap; text-overflow: ellipsis; }
+[aria-current="true"] .nm { font-weight: 500; color: var(--t1); }
+.tm { flex: none; font-size: 12px; color: var(--t4); }
+.tl { font-size: 12px; color: var(--t3); }
+.st { display: inline-flex; align-items: center; gap: 6px; font-size: 12px; color: var(--t3); white-space: nowrap; }
+.st::before { content: ""; flex: none; width: 6px; height: 6px; border-radius: 50%; background: var(--t4); }
+.st[data-s="run"] { color: var(--t1); }
+.st[data-s="run"]::before { background: var(--accent); }
+.st[data-s="ask"] { color: var(--amber); }
+.st[data-s="ask"]::before { background: var(--amber); }
+.pane { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); grid-template-rows: auto auto 1fr auto; }
+.pane-head { grid-column: 1 / -1; display: flex; justify-content: space-between; gap: 16px; padding: 16px 24px 0; font-size: 12px; color: var(--t3); }
+.task { grid-column: 1 / -1; padding: 12px 24px 20px; border-bottom: 1px solid var(--line); }
+.lab { margin-bottom: 8px; font-size: 12px; color: var(--t3); }
+.q { min-height: 24px; font-size: 16px; line-height: 24px; color: var(--t1); }
+.q::after { content: ""; display: inline-block; width: 8px; height: 16px; margin-left: 2px; background: var(--t3); vertical-align: -2px; }
+.typed .q::after { display: none; }
+.col { padding: 20px 24px; }
+.col + .col { padding-left: 8px; }
+.steps li { display: grid; grid-template-columns: 16px minmax(0, 1fr) auto; align-items: center; gap: 8px; min-height: 33px; padding: 6px 0; border-top: 1px solid var(--line); color: var(--t2); }
+.steps i { width: 6px; height: 6px; margin-left: 3px; border-radius: 50%; background: var(--accent); }
+.steps .ok i { width: 6px; height: 10px; margin: 0 0 3px 4px; border: solid var(--t3); border-width: 0 1.5px 1.5px 0; border-radius: 0; background: none; rotate: 45deg; }
+.steps .on { color: var(--t1); }
+.steps small { font-size: 12px; color: var(--t4); }
+.steps .on small { color: var(--t3); }
+.result { min-height: 133px; padding: 12px 16px; border: 1px solid var(--line); border-radius: 6px; background: var(--raised); }
+.result .wait { color: var(--t4); }
+.rt { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 0 12px; padding-bottom: 8px; }
+.rt b { font-weight: 500; color: var(--t1); }
+.rt small { font-size: 12px; color: var(--t3); white-space: nowrap; }
+.result li { padding: 5px 0; border-top: 1px solid var(--line); }
+.bar { grid-column: 1 / -1; display: flex; align-items: center; justify-content: space-between; gap: 8px 16px; min-height: 56px; padding: 12px 24px; border-top: 1px solid var(--line); background: var(--inset); }
+.bar-msg { display: inline-flex; align-items: center; gap: 8px; color: var(--t1); }
+.bar-msg::before { content: ""; flex: none; width: 6px; height: 6px; border-radius: 50%; background: var(--t4); }
+.bar[data-s="run"] .bar-msg::before { background: var(--accent); }
+.bar[data-s="ask"] .bar-msg::before { background: var(--amber); }
+.bar-info { font-size: 12px; color: var(--t4); }
+.bar-acts { display: flex; gap: 8px; }
+
+/* Sections. Space first, then a hairline, then a surface. */
+section { padding: 96px 0; }
+.band { border-block: 1px solid var(--line); background: var(--inset); }
+h2 { font: 500 30px/1.2 var(--sans); letter-spacing: -.01em; color: var(--t1); }
+h3 { font: 500 20px/1.3 var(--sans); color: var(--t1); }
+.intro { max-width: 40em; margin-top: 12px; }
+.side { display: grid; grid-template-columns: 280px minmax(0, 1fr); align-items: start; gap: 64px; }
+.side .intro + p { margin-top: 16px; }
+.two { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); align-items: start; gap: 64px; }
+
+/* Tables: no boxes, a stronger line under the head, hairlines between rows. */
+.tw { overflow-x: auto; }
+table { width: 100%; border-collapse: collapse; text-align: left; }
+thead th { padding: 0 24px 12px 0; border-bottom: 1px solid var(--line2); font: 500 13px/1.5 var(--sans); color: var(--t3); white-space: nowrap; }
+tbody th, td { padding: 16px 24px 16px 0; border-bottom: 1px solid var(--line); vertical-align: top; }
+tbody th { font-weight: 500; color: var(--t1); white-space: nowrap; }
+td.dim { color: var(--t3); }
+td.num { font: 400 13px/26px var(--mono); color: var(--t3); white-space: nowrap; }
+tr > :last-child { padding-right: 0; }
+#product .tw { margin-top: 48px; }
+#product tbody th { width: 10em; }
+
+/* Approvals: rows on the left, the dialog as it appears in the product on the right. */
+.rows { margin-top: 32px; }
+.rows > div { display: grid; grid-template-columns: 112px minmax(0, 1fr); gap: 24px; padding: 16px 0; border-top: 1px solid var(--line); }
+.rows > div:last-child { border-bottom: 1px solid var(--line); }
+.rows dt { font-weight: 500; color: var(--t1); }
+.rows + p { margin-top: 24px; color: var(--t3); }
+.ask { border: 1px solid var(--line2); border-radius: 6px; background: var(--panel); box-shadow: 0 1px 2px rgba(0, 0, 0, .4), 0 16px 40px rgba(0, 0, 0, .4); font: 400 13px/1.5 var(--mono); }
+.ask-top { display: flex; justify-content: space-between; gap: 16px; padding: 10px 20px; border-bottom: 1px solid var(--line); border-radius: 6px 6px 0 0; background: var(--raised); font-size: 12px; color: var(--t3); }
+.ask-body { padding: 20px; }
+.ask-body > p { margin-top: 8px; }
+.ask table { margin-top: 16px; }
+.ask thead th { padding-bottom: 8px; font: 400 12px/1.5 var(--mono); }
+.ask td { padding: 8px 16px 8px 0; }
+.ask td:first-child { color: var(--t1); white-space: nowrap; }
+.ask td.more { color: var(--t3); }
+.ask-acts { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 20px; }
+.ask .btn { min-height: 40px; padding: 0 16px; font: 500 13px/1 var(--mono); }
+.ask .say { min-height: 20px; margin-top: 12px; color: var(--t1); }
+.ask-foot { padding: 10px 20px; border-top: 1px solid var(--line); font-size: 12px; color: var(--t4); }
+
+/* Pricing: cards, because a visitor picks one. Only Pro is filled. */
+.split { display: flex; flex-wrap: wrap; align-items: flex-end; justify-content: space-between; gap: 24px 48px; }
+.bill { display: inline-flex; align-items: center; gap: 12px; min-height: 40px; font-size: 13px; font-weight: 500; color: var(--t3); cursor: pointer; }
+.bill input { position: absolute; width: 1px; height: 1px; opacity: 0; }
+.bill i { position: relative; width: 38px; height: 22px; border: 1px solid var(--line2); border-radius: 6px; background: var(--raised); }
+.bill i::after { content: ""; position: absolute; top: 3px; left: 3px; width: 14px; height: 14px; border-radius: 3px; background: var(--t1); }
+.bill input:checked + i::after { left: 19px; }
+.bill:hover i { border-color: rgba(255, 255, 255, .32); }
+.bill input:focus-visible + i { outline: 2px solid var(--accent); outline-offset: 2px; }
+.bill:has(input:not(:checked)) .m, .bill:has(input:checked) .y { color: var(--t1); }
+.plans { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 16px; margin-top: 48px; }
+.plan { display: flex; flex-direction: column; padding: 24px; border: 1px solid var(--line); border-radius: 6px; background: var(--panel); }
+.plan.pro { border-color: var(--line2); background: var(--raised); }
+.plan .for { margin-top: 4px; font-size: 13px; color: var(--t3); }
+.price { margin-top: 24px; font-size: 13px; color: var(--t3); }
+.price b { margin-right: 6px; font: 500 30px/1.2 var(--sans); letter-spacing: -.01em; color: var(--t1); font-variant-numeric: tabular-nums; }
+.note { font-size: 13px; color: var(--t3); }
+.plan ul { margin: 24px 0; }
+.plan li { padding: 10px 0; border-top: 1px solid var(--line); }
+.plan li:last-child { border-bottom: 1px solid var(--line); }
+.plan .btn { margin-top: auto; }
+.fine { max-width: 62em; margin-top: 24px; font-size: 13px; color: var(--t3); }
+
+/* API: one code block with language tabs, and the endpoint reference beside it. */
+.api-grid { display: grid; grid-template-columns: minmax(0, 7fr) minmax(0, 5fr); align-items: start; gap: 48px; margin-top: 48px; }
+.codebox { overflow: hidden; border: 1px solid var(--line2); border-radius: 6px; background: var(--panel); }
+.tabs { display: flex; padding: 0 8px; border-bottom: 1px solid var(--line); background: var(--raised); }
+.tabs button { height: 40px; padding: 0 12px; border: 0; background: none; font: 500 13px/1 var(--mono); color: var(--t3); cursor: pointer; }
+.tabs button:hover { color: var(--t1); }
+.tabs button[aria-selected="true"] { color: var(--t1); box-shadow: inset 0 -2px 0 var(--t1); }
+.tabs button:focus-visible { outline-offset: -2px; }
+#code { min-height: 282px; margin: 0; padding: 20px; overflow-x: auto; font: 400 13px/1.7 var(--mono); color: var(--t2); white-space: pre; tab-size: 2; }
+#code .k { font-weight: 500; color: var(--t1); }
+#code .s { color: var(--t1); }
+#code .c { color: var(--t3); }
+.api-grid .tw { margin-top: 20px; }
+.ref { font-size: 13px; }
+.ref tbody th, .ref td { padding: 12px 16px 12px 0; }
+.ref tbody th, .ref td:nth-child(2) { font: 400 13px/1.6 var(--mono); }
+.ref td:nth-child(2) { color: var(--t3); }
+.kv { margin-top: 24px; font-size: 13px; }
+.kv div { display: flex; gap: 16px; padding: 4px 0; }
+.kv dt { flex: none; width: 88px; color: var(--t3); }
+.kv dd { font-family: var(--mono); overflow-wrap: anywhere; }
+
+/* Security: a plain two-column list on hairlines. */
+.facts { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); column-gap: 64px; margin-top: 48px; }
+.facts div { padding: 24px 0; border-top: 1px solid var(--line); }
+.facts dt { font-weight: 500; color: var(--t1); }
+.facts dd { max-width: 34em; margin-top: 4px; }
+
+/* Questions. */
+details { border-top: 1px solid var(--line); }
+details:last-of-type { border-bottom: 1px solid var(--line); }
+summary { display: flex; align-items: center; justify-content: space-between; gap: 16px; min-height: 64px; padding: 12px 0; font-weight: 500; color: var(--t1); list-style: none; cursor: pointer; }
+summary::-webkit-details-marker { display: none; }
+summary::after { content: "+"; flex: none; width: 16px; font: 400 20px/1 var(--mono); color: var(--t3); text-align: center; }
+details[open] summary::after { content: "\2212"; }
+summary:hover::after { color: var(--t1); }
+details p { max-width: 40em; padding: 0 48px 24px 0; }
+
+/* Footer. */
+footer { padding: 64px 0 32px; border-top: 1px solid var(--line); font-size: 13px; }
+.foot { display: grid; grid-template-columns: minmax(0, 3fr) repeat(4, minmax(0, 2fr)); gap: 32px; }
+address { margin-top: 16px; font-style: normal; line-height: 1.7; color: var(--t3); }
+address a { color: var(--t2); }
+.fh { margin-bottom: 8px; font-weight: 500; color: var(--t1); }
+.foot li a { display: inline-block; line-height: 32px; color: var(--t3); text-decoration: none; }
+.foot li a:hover { color: var(--t1); text-decoration: underline; }
+.legal { grid-column: 1 / -1; margin-top: 32px; padding-top: 24px; border-top: 1px solid var(--line); color: var(--t3); }
+
+/* Account dialog (Sign in, Create a free account, plan buttons). */
+dialog { width: min(400px, calc(100vw - 32px)); padding: 24px; border: 1px solid var(--line2); border-radius: 6px; background: var(--raised); color: var(--t2); box-shadow: 0 1px 2px rgba(0, 0, 0, .5), 0 24px 64px rgba(0, 0, 0, .5); }
+dialog::backdrop { background: rgba(0, 0, 0, .64); }
+dialog h2 { font-size: 20px; }
+dialog h2 + p { margin-top: 8px; }
+dialog label { display: block; margin: 20px 0 8px; font-size: 13px; font-weight: 500; }
+dialog input { width: 100%; height: 44px; padding: 0 12px; border: 1px solid var(--line2); border-radius: 6px; background: var(--inset); color: var(--t1); font: 400 16px var(--sans); }
+dialog input::placeholder { color: var(--t4); }
+dialog .btn { width: 100%; margin-top: 12px; }
+dialog .say { min-height: 21px; margin-top: 12px; font-size: 13px; color: var(--t1); }
+dialog .close { min-height: 40px; margin-top: 4px; padding: 0; border: 0; background: none; font-size: 13px; color: var(--t2); text-decoration: underline; text-underline-offset: 3px; cursor: pointer; }
+dialog .close:hover { color: var(--t1); }
+
+@media (max-width: 1159px) { /* the pane goes to one column before its lines would wrap; the task keeps room for two lines */
+  .pane { grid-template-columns: minmax(0, 1fr); }
+  .col + .col { padding: 0 24px 20px; }
+  .q { min-height: 48px; }
+}
+@media (max-width: 999px) {
+  .side, .two, .api-grid { grid-template-columns: minmax(0, 1fr); gap: 48px; }
+  .foot { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+  .foot > div:first-child { grid-column: 1 / -1; }
+}
+@media (max-width: 899px) { /* the window stacks: the rail keeps the runs that play, the pane goes full width */
+  .win-body { grid-template-columns: minmax(0, 1fr); }
+  .rail { border-right: 0; border-bottom: 1px solid var(--line); }
+  .rail .x { display: none; }
+  .plans { grid-template-columns: minmax(0, 1fr); }
+}
+@media (max-width: 719px) {
+  .wrap { padding-inline: 16px; }
+  .top { position: static; }
+  .top .wrap { flex-wrap: wrap; gap: 0 20px; height: auto; padding-block: 8px 4px; }
+  .logo { margin-right: auto; line-height: 40px; }
+  .signin { order: 1; }
+  .top nav { order: 2; width: 100%; gap: 20px; margin: 0; }
+  .hero { padding: 32px 0 64px; }
+  h1 { font-size: 30px; line-height: 1.15; }
+  section { padding: 64px 0; }
+  .win { margin-top: 32px; }
+  .rail button { padding-block: 12px; }
+  .pane-head, .task, .col, .col + .col, .bar { padding-inline: 16px; }
+  .bar { flex-wrap: wrap; align-content: center; min-height: 92px; }
+  .bar .btn { min-height: 40px; padding: 0 16px; }
+  .tw.wide table { min-width: 680px; }
+  #product tbody th { width: 7em; }
+  .tw .ref { min-width: 480px; }
+  .rows > div { grid-template-columns: minmax(0, 1fr); gap: 4px; }
+  .ask-body { padding: 16px; }
+  .ask-top, .ask-foot { padding-inline: 16px; }
+  .facts { grid-template-columns: minmax(0, 1fr); }
+  .foot { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .foot li a { line-height: 40px; }
+  details p { padding-right: 0; }
+}
+@media (max-width: 479px) { /* step and result lines wrap here: give every row two lines so the window keeps one height */
+  .q { min-height: 72px; }
+  .steps li { min-height: 52px; }
+  .result { min-height: 190px; }
+  .result li { display: flex; align-items: center; min-height: 48px; }
+}
+</style>
+<style id="sb-motion">
+/* siteboard scroll reveal: sections fade in once, 12px rise, nothing else. */
+.sb-mo [data-sb-mo] { transition: opacity .45s ease, transform .45s ease; }
+.sb-mo [data-sb-mo]:not(.sb-in) { opacity: 0; transform: translateY(12px); }
+@media (prefers-reduced-motion: reduce) { .sb-mo [data-sb-mo] { transition: none; } .sb-mo [data-sb-mo]:not(.sb-in) { opacity: 1; transform: none; } }
+</style>
+<style id="sb-divide">
+/* siteboard: a hairline midway between two neighbouring sections that share a background. Written by divide.mjs. */
+@media (max-width:599.98px){
+body>main:nth-child(2)>section:nth-child(3){--sb-line:-8px;position:relative}
+body>main:nth-child(2)>section:nth-child(3)::before{content:"";position:absolute;left:0;right:0;top:-8px;border-top:1px solid color-mix(in srgb,currentColor 16%,transparent);pointer-events:none}
+body>main:nth-child(2)>section:nth-child(8){--sb-line:0px;background-image:linear-gradient(color-mix(in srgb,currentColor 16%,transparent),color-mix(in srgb,currentColor 16%,transparent));background-repeat:no-repeat;background-size:100% 1px;background-position:0 0px}
+}
+@media (min-width:600px) and (max-width:1023.98px){
+body>main:nth-child(2)>section:nth-child(3){--sb-line:-8px;position:relative}
+body>main:nth-child(2)>section:nth-child(3)::before{content:"";position:absolute;left:0;right:0;top:-8px;border-top:1px solid color-mix(in srgb,currentColor 16%,transparent);pointer-events:none}
+body>main:nth-child(2)>section:nth-child(8){--sb-line:0px;background-image:linear-gradient(color-mix(in srgb,currentColor 16%,transparent),color-mix(in srgb,currentColor 16%,transparent));background-repeat:no-repeat;background-size:100% 1px;background-position:0 0px}
+}
+@media (min-width:1024px) and (max-width:1439.98px){
+body>main:nth-child(2)>section:nth-child(3){--sb-line:0px;background-image:linear-gradient(color-mix(in srgb,currentColor 16%,transparent),color-mix(in srgb,currentColor 16%,transparent));background-repeat:no-repeat;background-size:100% 1px;background-position:0 0px}
+body>main:nth-child(2)>section:nth-child(8){--sb-line:0px;background-image:linear-gradient(color-mix(in srgb,currentColor 16%,transparent),color-mix(in srgb,currentColor 16%,transparent));background-repeat:no-repeat;background-size:100% 1px;background-position:0 0px}
+}
+@media (min-width:1440px){
+body>main:nth-child(2)>section:nth-child(3){--sb-line:0px;background-image:linear-gradient(color-mix(in srgb,currentColor 16%,transparent),color-mix(in srgb,currentColor 16%,transparent));background-repeat:no-repeat;background-size:100% 1px;background-position:0 0px}
+body>main:nth-child(2)>section:nth-child(8){--sb-line:0px;background-image:linear-gradient(color-mix(in srgb,currentColor 16%,transparent),color-mix(in srgb,currentColor 16%,transparent));background-repeat:no-repeat;background-size:100% 1px;background-position:0 0px}
+}
+</style>
+</head>
+<body id="top">
+<header class="top"><div class="wrap">
+  <a class="logo" href="#top">Relay</a>
+  <nav aria-label="Main"><a href="#product">Product</a><a href="#integrations">Integrations</a><a href="#pricing">Pricing</a><a href="#api">API</a></nav>
+  <a class="signin" href="#account" data-open="Sign in">Sign in</a>
+</div></header>
+<main>
+  <section class="hero"><div class="wrap">
+    <h1>Relay reads your inbox and tickets, then does the task step by step.</h1>
+    <p class="lead">Give it a job in plain words and approve anything it wants to send, delete or pay.</p>
+    <div class="acts"><a class="btn" href="#account" data-open="Create a free account">Create a free account</a><a class="arrow" href="#api">Read the API docs</a></div>
+
+    <div class="win" id="demo">
+      <div class="win-top"><span>relay / support-ops / runs</span><span>Tue, Oct 6</span></div>
+      <div class="win-body">
+        <div class="rail">
+          <p class="rail-h"><span>Runs</span><span>6 today</span></p>
+          <ul id="rail">
+            <li class="x"><button type="button" aria-current="false"><span class="r"><span class="nm">Sprint 42 write-up</span><span class="tm">9:44 AM</span></span><span class="r"><span class="tl">Jira</span><span class="st" data-s="run">Running</span></span></button></li>
+            <li><button type="button" aria-current="true"><span class="r"><span class="nm">Weekly ticket summary</span><span class="tm">9:41 AM</span></span><span class="r"><span class="tl">Zendesk</span><span class="st" data-s="done">Done</span></span></button></li>
+            <li><button type="button" aria-current="false"><span class="r"><span class="nm">Merge duplicate contacts</span><span class="tm">9:38 AM</span></span><span class="r"><span class="tl">HubSpot</span><span class="st" data-s="done">Done</span></span></button></li>
+            <li><button type="button" aria-current="false"><span class="r"><span class="nm">Reply drafts for today</span><span class="tm">9:31 AM</span></span><span class="r"><span class="tl">Gmail</span><span class="st" data-s="ask">Needs approval</span></span></button></li>
+            <li class="x"><button type="button" aria-current="false"><span class="r"><span class="nm">Overdue invoice list</span><span class="tm">9:12 AM</span></span><span class="r"><span class="tl">Stripe</span><span class="st" data-s="done">Done</span></span></button></li>
+            <li class="x"><button type="button" aria-current="false"><span class="r"><span class="nm">Lead sheet cleanup</span><span class="tm">8:50 AM</span></span><span class="r"><span class="tl">Google Sheets</span><span class="st" data-s="done">Done</span></span></button></li>
+          </ul>
+        </div>
+        <div class="pane">
+          <p class="pane-head"><span id="run-meta">Run 4825 · Zendesk · 9:41 AM</span><span class="st" id="run-state" data-s="done">Done</span></p>
+          <div class="task typed" id="task"><p class="lab">Task</p><p class="q"><span id="q">Summarize this week's support tickets and tag the urgent ones</span></p></div>
+          <div class="col"><p class="lab">Steps</p>
+            <ul class="steps" id="steps">
+              <li class="ok"><i></i><span>Reading 142 open tickets from Zendesk</span><small>2.1s</small></li>
+              <li class="ok"><i></i><span>Grouping by topic</span><small>3.4s</small></li>
+              <li class="ok"><i></i><span>Flagging 6 as urgent</span><small>0.9s</small></li>
+              <li class="ok"><i></i><span>Writing the summary</span><small>2.8s</small></li>
+            </ul>
+          </div>
+          <div class="col"><p class="lab">Result</p>
+            <div class="result" id="result">
+              <p class="rt"><b>Weekly summary</b><small>142 tickets · 6 urgent</small></p>
+              <ul><li>Login errors after Tuesday's update (38)</li><li>Refund requests, mostly EU (21)</li><li>6 enterprise accounts waiting over 24h</li></ul>
+            </div>
+          </div>
+          <div class="bar" id="bar" data-s="done">
+            <span class="bar-msg" id="bar-msg">Posted to #support</span>
+            <span class="bar-info" id="bar-info">4 steps · 9.2s</span>
+            <span class="bar-acts" id="bar-acts" hidden><button type="button" class="btn line sm">Approve</button><button type="button" class="btn line sm">Edit</button><button type="button" class="btn line sm">Skip</button></span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div></section>
+
+  <section id="product"><div class="wrap">
+    <h2>A run, start to finish</h2>
+    <p class="intro">A run is one task. Every run goes through the same stages, and each stage shows up in the window as it happens.</p>
+    <div class="tw wide" tabindex="0" role="region" aria-label="Stages of a run">
+      <table>
+        <thead><tr><th scope="col">Step</th><th scope="col">What Relay does</th><th scope="col">What you see</th><th scope="col">Typical time</th></tr></thead>
+        <tbody>
+          <tr><th scope="row">Plan</th><td>Reads your sentence, picks the tools it needs and lists the steps.</td><td class="dim">The task and the tools it will open, before anything runs.</td><td class="num">1 to 2 s</td></tr>
+          <tr><th scope="row">Read</th><td>Pulls only the records in scope: the tickets, threads or rows the task names.</td><td class="dim">A count of what was read from each tool.</td><td class="num">2 to 10 s</td></tr>
+          <tr><th scope="row">Work</th><td>Groups, matches, drafts or fills in fields, one step at a time.</td><td class="dim">Each step with its state and how long it took.</td><td class="num">5 to 40 s</td></tr>
+          <tr><th scope="row">Check</th><td>Compares the output with the task and reruns a step that failed, up to twice.</td><td class="dim">Any retry, with the reason.</td><td class="num">1 to 5 s</td></tr>
+          <tr><th scope="row">Approval</th><td>Stops before sending, deleting or paying and waits for a person.</td><td class="dim">A bar with Approve, Edit and Skip.</td><td class="num">up to 24 h</td></tr>
+          <tr><th scope="row">Result</th><td>Writes the summary and posts or saves it where you asked.</td><td class="dim">The summary, with a link to every record it touched.</td><td class="num">1 to 3 s</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div></section>
+
+  <section id="integrations"><div class="wrap side">
+    <div>
+      <h2>Integrations</h2>
+      <p class="intro">Eight tools today. Every connection starts read-only, and you turn on write actions one tool at a time.</p>
+      <p><a class="arrow" href="#approvals">What always waits for approval</a></p>
+    </div>
+    <div class="tw wide" tabindex="0" role="region" aria-label="Tools Relay connects to">
+      <table>
+        <thead><tr><th scope="col">Tool</th><th scope="col">Reads</th><th scope="col">Can do</th><th scope="col">Asks first</th></tr></thead>
+        <tbody>
+          <tr><th scope="row">Gmail</th><td class="dim">Threads, labels and attachments in the inboxes you connect</td><td>Draft replies, apply labels, archive threads</td><td>Sending or deleting any message</td></tr>
+          <tr><th scope="row">Slack</th><td class="dim">Channels you invite it to, including threads</td><td>Post a summary, reply in a thread</td><td>The first post in a channel, any direct message</td></tr>
+          <tr><th scope="row">Notion</th><td class="dim">Pages and databases you share with it</td><td>Create pages, update properties</td><td>Deleting or moving a page</td></tr>
+          <tr><th scope="row">HubSpot</th><td class="dim">Contacts, companies, deals and notes</td><td>Update fields, merge duplicates, log a note</td><td>Deleting a record, edits to more than 100 records</td></tr>
+          <tr><th scope="row">Zendesk</th><td class="dim">Tickets, tags, macros and help center articles</td><td>Tag, assign, draft a reply</td><td>Public replies, closing a ticket</td></tr>
+          <tr><th scope="row">Google Sheets</th><td class="dim">Sheets you share, by tab or named range</td><td>Append rows, fill a column, write to a copy</td><td>Overwriting or clearing existing cells</td></tr>
+          <tr><th scope="row">Jira</th><td class="dim">Issues, sprints and comments</td><td>Create issues, comment, move status</td><td>Deleting an issue, bulk reassignment</td></tr>
+          <tr><th scope="row">Stripe</th><td class="dim">Customers, invoices and payment status</td><td>Draft an invoice, look up a payment</td><td>Refunds, charges, sending an invoice</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div></section>
+
+  <section class="band" id="approvals"><div class="wrap two">
+    <div>
+      <h2>Approvals</h2>
+      <p class="intro">Relay reads and prepares as much as you allow. Some actions always stop and wait for a person, on every plan, and that cannot be switched off.</p>
+      <dl class="rows">
+        <div><dt>Sending</dt><dd>Email, public ticket replies, direct messages and the first post in a channel.</dd></div>
+        <div><dt>Deleting</dt><dd>Records, pages, messages and rows. Where a tool has an archive, Relay archives instead.</dd></div>
+        <div><dt>Paying</dt><dd>Refunds, charges, invoices and anything else that moves money.</dd></div>
+      </dl>
+      <p>On Team you choose who can approve for each agent. A request nobody answers within 24 hours is skipped and written to the audit log.</p>
+    </div>
+    <div class="ask" role="group" aria-label="Example approval request">
+      <p class="ask-top"><span class="st" data-s="ask">Needs approval</span><span>Run 4823 · Gmail</span></p>
+      <div class="ask-body">
+        <h3>Send 11 emails?</h3>
+        <p>Relay drafted a reply to each of today's 11 unanswered threads. Nothing has been sent.</p>
+        <table>
+          <thead><tr><th scope="col">To</th><th scope="col">Subject</th></tr></thead>
+          <tbody>
+            <tr><td>Mara Lindqvist</td><td>Re: Call on Thursday at 2 PM</td></tr>
+            <tr><td>Devon Park</td><td>Re: Vendor proposal</td></tr>
+            <tr><td>Priya Nair</td><td>Re: Invoice missing for September</td></tr>
+            <tr><td class="more" colspan="2">and 8 more drafts</td></tr>
+          </tbody>
+        </table>
+        <div class="ask-acts" id="ask-acts"><button type="button" class="btn">Approve and send</button><button type="button" class="btn line">Edit drafts</button><button type="button" class="btn line">Skip</button></div>
+        <p class="say" id="ask-say" role="status"></p>
+      </div>
+      <p class="ask-foot">Requested 9:31 AM · skipped after 24 hours with no answer</p>
+    </div>
+  </div></section>
+
+  <section id="pricing"><div class="wrap">
+    <div class="split">
+      <div>
+        <h2>Pricing</h2>
+        <p class="intro">Priced per workspace, not per seat. A run is one task from start to finish, however many steps it takes.</p>
+      </div>
+      <label class="bill"><span class="m">Monthly</span><input type="checkbox" id="yearly" role="switch" aria-label="Bill yearly"><i></i><span class="y">Yearly</span></label>
+    </div>
+    <div class="plans">
+      <article class="plan">
+        <h3>Free</h3><p class="for">For trying Relay on one inbox.</p>
+        <p class="price"><b data-m="$0" data-y="$0">$0</b>per month</p><p class="note" data-m="No card needed." data-y="No card needed.">No card needed.</p>
+        <ul><li>100 runs a month</li><li>2 connected tools</li><li>Run history for 30 days</li></ul>
+        <a class="btn line" href="#account" data-open="Create a free account">Create a free account</a>
+      </article>
+      <article class="plan pro">
+        <h3>Pro</h3><p class="for">For one person or a small team.</p>
+        <p class="price"><b data-m="$29" data-y="$24">$29</b>per month</p><p class="note" data-m="Billed monthly." data-y="Billed $288 a year.">Billed monthly.</p>
+        <ul><li>2,000 runs a month</li><li>Unlimited connected tools</li><li>Scheduled runs</li></ul>
+        <a class="btn" href="#account" data-open="Choose Pro">Choose Pro</a>
+      </article>
+      <article class="plan">
+        <h3>Team</h3><p class="for">For a department with shared agents.</p>
+        <p class="price"><b data-m="$79" data-y="$65">$79</b>per month</p><p class="note" data-m="Billed monthly." data-y="Billed $780 a year.">Billed monthly.</p>
+        <ul><li>10,000 runs a month</li><li>Shared agents and approvals</li><li>SSO</li><li>Audit log</li><li>API access</li></ul>
+        <a class="btn line" href="#account" data-open="Talk to sales">Talk to sales</a>
+      </article>
+    </div>
+    <p class="fine">Prices in US dollars, before tax. Unused runs do not carry over. Yearly billing saves $60 on Pro and $168 on Team.</p>
+  </div></section>
+
+  <section class="band" id="api"><div class="wrap">
+    <h2>API</h2>
+    <p class="intro">Start a run with one request and receive a webhook each time its state changes. The API is part of the Team plan.</p>
+    <div class="api-grid">
+      <div class="codebox">
+        <div class="tabs" role="tablist" aria-label="Language"><button type="button" role="tab" aria-selected="true" aria-controls="code" data-l="curl">curl</button><button type="button" role="tab" aria-selected="false" aria-controls="code" data-l="js">JavaScript</button><button type="button" role="tab" aria-selected="false" aria-controls="code" data-l="py">Python</button></div>
+<pre id="code" role="tabpanel" tabindex="0"><span class="c"># Start a run</span>
+curl -X POST https://api.relay.example/v1/runs \
+  -H <span class="s">"Authorization: Bearer $RELAY_KEY"</span> \
+  -H <span class="s">"Content-Type: application/json"</span> \
+  -d <span class="s">'{ "task": "Summarize the tickets opened this week",
+       "tools": ["zendesk", "slack"] }'</span>
+
+<span class="c"># Response</span>
+{ "id": "run_4827", "state": "running" }</pre>
+      </div>
+      <div>
+        <h3 id="endpoints">Endpoints</h3>
+        <div class="tw" tabindex="0" role="region" aria-label="API endpoints"><table class="ref">
+          <thead><tr><th scope="col">Endpoint</th><th scope="col">Method</th><th scope="col">Purpose</th></tr></thead>
+          <tbody>
+            <tr><th scope="row">/v1/runs</th><td>POST</td><td>Start a run from a task and a list of tools.</td></tr>
+            <tr><th scope="row">/v1/runs/{id}</th><td>GET</td><td>Read a run's state, steps and result.</td></tr>
+            <tr><th scope="row">/v1/runs/{id}/approval</th><td>POST</td><td>Approve, edit or skip a step that is waiting.</td></tr>
+            <tr><th scope="row">/v1/webhooks</th><td>POST</td><td>Register a URL to call when a run changes state.</td></tr>
+          </tbody>
+        </table></div>
+        <dl class="kv">
+          <div><dt>Base URL</dt><dd>https://api.relay.example</dd></div>
+          <div><dt>Auth</dt><dd>Bearer key, scoped per tool</dd></div>
+          <div><dt>Rate limit</dt><dd>60 requests a minute</dd></div>
+        </dl>
+      </div>
+    </div>
+  </div></section>
+
+  <section id="security"><div class="wrap">
+    <h2>Security</h2>
+    <dl class="facts">
+      <div><dt>Read-only by default</dt><dd>A new connection can read and nothing else. You turn on write actions per tool and can turn them off again at any time.</dd></div>
+      <div><dt>Scoped keys</dt><dd>Each API key lists the tools and actions it may use. A key made for Zendesk cannot open Gmail.</dd></div>
+      <div><dt>Audit log</dt><dd>Every run, step, approval and key change is recorded with the person and the time. Team workspaces can export it as CSV.</dd></div>
+      <div><dt>Data kept 30 days</dt><dd>Run inputs and outputs are deleted after 30 days. You can delete a single run sooner from its page.</dd></div>
+      <div><dt>SSO on Team</dt><dd>SAML sign-in through Okta, Google Workspace or Microsoft Entra ID, with the option to require it for everyone.</dd></div>
+      <div><dt>Where data is hosted</dt><dd>On AWS in Oregon (us-west-2). Data is encrypted in transit and at rest, and is not used to train models.</dd></div>
+    </dl>
+  </div></section>
+
+  <section id="questions"><div class="wrap side">
+    <div>
+      <h2>Questions</h2>
+      <p class="intro">Something else? Call <a href="tel:+14155550154">(415) 555-0154</a> on weekdays, 9 AM to 5 PM Pacific.</p>
+    </div>
+    <div>
+      <details open><summary>What counts as a run?</summary><p>One task from start to finish, however many steps or tools it uses. A run that stops for approval and is then skipped still counts as one.</p></details>
+      <details><summary>Can Relay send something without asking?</summary><p>Not email, public replies or payments. Sending, deleting and paying wait for a click on every plan. Smaller write actions, such as tagging a ticket, run on their own once you turn them on for a tool.</p></details>
+      <details><summary>What happens when a step fails?</summary><p>Relay retries the step twice. If it still fails, the run stops there, shows the error and leaves everything after it untouched. You can rerun from the failed step.</p></details>
+      <details><summary>Is our data used to train models?</summary><p>No. Inputs and outputs are used to complete the run and are deleted after 30 days.</p></details>
+      <details><summary>How do we change plan or cancel?</summary><p>From Settings, then Billing. An upgrade starts right away. A cancelled plan runs to the end of the period you paid for, then the workspace moves to Free.</p></details>
+    </div>
+  </div></section>
+</main>
+<footer><div class="wrap foot">
+  <div id="contact">
+    <a class="logo" href="#top">Relay</a>
+    <address>Relay Labs, Inc.<br>548 Market Street, Suite 310<br>San Francisco, CA 94104<br><a href="tel:+14155550154">(415) 555-0154</a></address>
+  </div>
+  <div><p class="fh">Product</p><ul><li><a href="#product">A run, start to finish</a></li><li><a href="#integrations">Integrations</a></li><li><a href="#approvals">Approvals</a></li><li><a href="#pricing">Pricing</a></li></ul></div>
+  <div><p class="fh">Developers</p><ul><li><a href="#api">API</a></li><li><a href="#endpoints">Endpoints</a></li><li><a href="#security">Security</a></li></ul></div>
+  <div><p class="fh">Help</p><ul><li><a href="#questions">Questions</a></li><li><a href="#contact">Contact</a></li></ul></div>
+  <div><p class="fh">Account</p><ul><li><a href="#account" data-open="Sign in">Sign in</a></li><li><a href="#account" data-open="Create a free account">Create a free account</a></li></ul></div>
+  <p class="legal">© 2026 Relay Labs, Inc. Product names on this page belong to their owners.</p>
+</div></footer>
+
+<dialog id="account" aria-labelledby="account-title">
+  <h2 id="account-title">Sign in</h2>
+  <p>Enter your work email and we will send you a link to continue.</p>
+  <form id="account-form">
+    <label for="account-email">Work email</label>
+    <input id="account-email" type="email" required autocomplete="email" placeholder="you@company.com">
+    <button class="btn" type="submit">Email me a link</button>
+    <p class="say" id="account-say" role="status"></p>
+  </form>
+  <form method="dialog"><button class="close" type="submit">Close</button></form>
+</dialog>
+
+<script>
+(() => {
+  const $ = (id) => document.getElementById(id);
+  const reduce = matchMedia("(prefers-reduced-motion: reduce)").matches;
+  const wait = (ms) => new Promise((r) => setTimeout(r, ms));
+  const PREVIEW = "This is a preview, so nothing was sent.";
+
+  // Product window. One entry per rail row, in the same order; the rail's tool, time and final state are read from the HTML.
+  // A step is [text, duration]. A run without "out" is still running ("of" = how many steps it will have).
+  const runs = [
+    { id: "4826", q: "Write up sprint 42 from Jira and post the page in Notion", of: 4, steps: [["Reading 31 issues in sprint 42", "1.7s"], ["Sorting into shipped, slipped, blocked", "2.2s"], ["Writing the page in Notion", ""]] },
+    { id: "4825", q: "Summarize this week's support tickets and tag the urgent ones", steps: [["Reading 142 open tickets from Zendesk", "2.1s"], ["Grouping by topic", "3.4s"], ["Flagging 6 as urgent", "0.9s"], ["Writing the summary", "2.8s"]], out: { t: "Weekly summary", m: "142 tickets · 6 urgent", l: ["Login errors after Tuesday's update (38)", "Refund requests, mostly EU (21)", "6 enterprise accounts waiting over 24h"], a: "Posted to #support" } },
+    { id: "4824", q: "Find duplicate customers in HubSpot and merge them", steps: [["Scanning 8,420 contacts", "4.6s"], ["Matching emails and phone numbers", "3.1s"], ["Found 37 duplicates", "0.4s"], ["Merging, keeping the newest record", "5.2s"]], out: { t: "37 contacts merged", m: "8,420 scanned", l: ["Kept the most recent owner and stage", "Old records archived, not deleted", "Report saved to Google Sheets"], a: "Merged in HubSpot" } },
+    { id: "4823", q: "Draft replies to every unanswered email from today", steps: [["Reading 11 threads in Gmail", "1.9s"], ["Checking the calendar for free slots", "1.2s"], ["Drafting 11 replies in your tone", "6.3s"], ["Saving to Drafts", "0.8s"]], out: { t: "11 drafts ready", m: "nothing sent yet", l: ["Proposed Thursday 2 PM to Mara Lindqvist", "Declined the vendor pitch politely", "Asked finance for the missing invoice"], a: "About to send 11 emails" } },
+    { id: "4822", q: "List every invoice more than 14 days overdue, with the account owner", steps: [["Reading open invoices in Stripe", "1.4s"], ["Keeping those over 14 days late", "0.3s"], ["Matching 9 invoices to HubSpot owners", "2.6s"], ["Writing the list", "1.1s"]], out: { t: "9 overdue invoices", m: "$14,280 open", l: ["Oldest is 41 days late, $2,400", "5 of the 9 have a failed card on file", "Owners added from HubSpot"], a: "Posted to #finance" } },
+    { id: "4821", q: "Clean up the Q4 leads sheet: fix casing and mark rows with no email", steps: [["Reading 1,206 rows from Q4 leads", "1.9s"], ["Fixing name and company casing", "3.0s"], ["Marking 48 rows with no email", "0.7s"], ["Writing to a copy of the sheet", "2.2s"]], out: { t: "1,206 rows checked", m: "48 marked · 0 deleted", l: ["Casing fixed in 312 names", "48 rows moved to a Review tab", "The original sheet was not changed"], a: "Saved as Q4 leads (cleaned)" } },
+  ];
+  const loop = [1, 2, 3]; // the rows that play, in order
+  const rows = [...document.querySelectorAll("#rail button")];
+  const el = { q: $("q"), task: $("task"), steps: $("steps"), result: $("result"), meta: $("run-meta"), state: $("run-state"), bar: $("bar"), msg: $("bar-msg"), info: $("bar-info"), acts: $("bar-acts") };
+  if (rows.length === runs.length && Object.values(el).every(Boolean)) {
+    const key = { Done: "done", Running: "run", "Needs approval": "ask" };
+    const txt = (b, c) => b.querySelector(c).textContent;
+    const fin = rows.map((b) => txt(b, ".st"));
+    const label = (node, s) => { node.textContent = s; node.dataset.s = key[s]; };
+    const mark = (i, s) => { label(rows[i].querySelector(".st"), s); label(el.state, s); el.bar.dataset.s = key[s]; };
+    const step = ([t, d], on) => `<li class="${on ? "on" : "ok"}"><i></i><span>${t}</span><small>${on ? "running" : d}</small></li>`;
+    let gen = 0; // every new play or click bumps this, and a play that is no longer current stops at its next await
+    // Select a run and empty the pane.
+    const open = (i) => {
+      rows.forEach((b, k) => { b.setAttribute("aria-current", k === i); label(b.querySelector(".st"), fin[k]); });
+      el.meta.textContent = `Run ${runs[i].id} · ${txt(rows[i], ".tl")} · ${txt(rows[i], ".tm")}`;
+      el.q.textContent = ""; el.steps.innerHTML = ""; el.info.textContent = ""; el.acts.hidden = true;
+      el.task.classList.remove("typed"); el.result.innerHTML = `<p class="wait">Appears when the steps finish.</p>`;
+    };
+    // The steps are done: final state, result, and the approval bar if the run needs one.
+    const close = (i) => {
+      const r = runs[i], n = r.steps.length;
+      mark(i, fin[i]);
+      if (!r.out) { el.msg.textContent = `Step ${n} of ${r.of}`; return; }
+      el.result.innerHTML = `<p class="rt"><b>${r.out.t}</b><small>${r.out.m}</small></p><ul>${r.out.l.map((x) => `<li>${x}</li>`).join("")}</ul>`;
+      el.msg.textContent = r.out.a;
+      el.acts.hidden = fin[i] !== "Needs approval";
+      if (el.acts.hidden) el.info.textContent = `${n} steps · ${r.steps.reduce((a, s) => a + parseFloat(s[1]), 0).toFixed(1)}s`;
+    };
+    // The whole run at once, no typing: used for reduced motion and when a row is clicked.
+    const finish = (i) => {
+      const r = runs[i]; gen++; open(i);
+      el.q.textContent = r.q; el.task.classList.add("typed");
+      el.steps.innerHTML = r.steps.map((s, k) => step(s, !r.out && k === r.steps.length - 1)).join("");
+      close(i);
+    };
+    // Type the task, tick the steps off one by one, show the result, then move to the next run.
+    const play = async (n) => {
+      const i = loop[n % loop.length], r = runs[i], g = ++gen;
+      open(i); mark(i, "Running"); el.msg.textContent = "Reading the task";
+      for (const ch of r.q) { el.q.textContent += ch; await wait(24 + Math.random() * 20); if (g !== gen) return; }
+      await wait(400); if (g !== gen) return;
+      el.task.classList.add("typed");
+      for (let k = 0; k < r.steps.length; k++) {
+        el.steps.insertAdjacentHTML("beforeend", step(r.steps[k], true));
+        el.msg.textContent = `Step ${k + 1} of ${r.steps.length}`;
+        await wait(850); if (g !== gen) return;
+        el.steps.lastElementChild.outerHTML = step(r.steps[k], false);
+      }
+      await wait(300); if (g !== gen) return;
+      close(i);
+      await wait(7500); if (g !== gen) return;
+      play(n + 1);
+    };
+    rows.forEach((b, i) => b.addEventListener("click", () => finish(i)));
+    el.acts.addEventListener("click", (e) => { if (!e.target.closest("button")) return; gen++; el.acts.hidden = true; el.msg.textContent = PREVIEW; });
+    reduce ? finish(loop[0]) : play(0);
+  }
+
+  // Approval dialog example.
+  const say = $("ask-say");
+  document.querySelectorAll("#ask-acts button").forEach((b) => b.addEventListener("click", () => { if (say) say.textContent = PREVIEW; }));
+
+  // Pricing: monthly or yearly.
+  const yearly = $("yearly");
+  if (yearly) yearly.addEventListener("change", () => document.querySelectorAll("#pricing [data-m]").forEach((n) => { n.textContent = yearly.checked ? n.dataset.y : n.dataset.m; }));
+
+  // API tabs switch the one code block. The curl snippet is the one already in the page.
+  const code = $("code"), tabs = [...document.querySelectorAll("#api [role=tab]")];
+  if (code && tabs.length) {
+    const snippets = {
+      curl: code.innerHTML,
+      js: `<span class="k">import</span> { Relay } <span class="k">from</span> <span class="s">"@relay/sdk"</span>;\n\n<span class="k">const</span> relay = <span class="k">new</span> Relay(process.env.RELAY_KEY);\n<span class="k">const</span> run = <span class="k">await</span> relay.runs.create({\n  task: <span class="s">"Summarize the tickets opened this week"</span>,\n  tools: [<span class="s">"zendesk"</span>, <span class="s">"slack"</span>],\n});\n\n<span class="c">// Resolves when the run is done or needs approval</span>\n<span class="k">const</span> out = <span class="k">await</span> run.wait();\nconsole.log(out.state, out.summary);`,
+      py: `<span class="k">import</span> os\n<span class="k">from</span> relay <span class="k">import</span> Relay\n\nrelay = Relay(api_key=os.environ[<span class="s">"RELAY_KEY"</span>])\nrun = relay.runs.create(\n    task=<span class="s">"Summarize the tickets opened this week"</span>,\n    tools=[<span class="s">"zendesk"</span>, <span class="s">"slack"</span>],\n)\n\n<span class="c"># Returns when the run is done or needs approval</span>\nout = run.wait()\nprint(out.state, out.summary)`,
+    };
+    tabs.forEach((b) => b.addEventListener("click", () => { tabs.forEach((x) => x.setAttribute("aria-selected", x === b)); code.innerHTML = snippets[b.dataset.l]; }));
+  }
+
+  // Account dialog: every "Sign in", "Create a free account" and plan button opens it. The form never submits.
+  const dlg = $("account"), dlgTitle = $("account-title"), dlgSay = $("account-say"), dlgForm = $("account-form");
+  if (dlg && dlg.showModal && dlgTitle && dlgSay && dlgForm) {
+    document.querySelectorAll('a[href="#account"]').forEach((a) => a.addEventListener("click", (e) => { e.preventDefault(); dlgTitle.textContent = a.dataset.open || a.textContent; dlgSay.textContent = ""; dlg.showModal(); }));
+    dlgForm.addEventListener("submit", (e) => { e.preventDefault(); dlgSay.textContent = PREVIEW; });
+  }
+})();
+</script>
+<script id="sb-motion">
+(() => {
+  if (matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+  const secs = [...document.querySelectorAll("main section, main > div, body > section, body > div.hero, .sec, body > main > *")].filter((e) => e.children.length && !e.closest("header, footer, nav, dialog, [popover]"));
+  if (!secs.length) secs.push(...[...document.body.children].filter((e) => e.children.length && !e.matches("header, footer, nav, script, style, link, dialog, [popover]")));
+  if (!secs.length) return;
+  const near = (e) => e.getBoundingClientRect().top < innerHeight * .92;
+  const start = () => {
+    secs.forEach((e) => e.setAttribute("data-sb-mo", ""));
+    document.documentElement.classList.add("sb-mo");
+    void document.body.offsetWidth;
+    const reveal = (e) => e.classList.add("sb-in");
+    secs.filter(near).forEach(reveal);
+    const rest = () => secs.filter((e) => !e.classList.contains("sb-in"));
+    if ("IntersectionObserver" in window) {
+      const io = new IntersectionObserver((xs) => xs.forEach((x) => { if (x.isIntersecting) { reveal(x.target); io.unobserve(x.target); } }), { rootMargin: "0px 0px -8% 0px" });
+      rest().forEach((e) => io.observe(e));
+    }
+    const sweep = () => rest().filter(near).forEach(reveal);
+    addEventListener("scroll", sweep, { passive: true }); addEventListener("resize", sweep);
+    setTimeout(sweep, 1500); setTimeout(() => rest().forEach(reveal), 6000);
+  };
+  document.hidden ? addEventListener("visibilitychange", function f() { if (!document.hidden) { removeEventListener("visibilitychange", f); start(); } }) : start();
+})();
+</script>
+</body>
+</html>

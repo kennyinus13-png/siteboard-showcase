@@ -1,0 +1,34 @@
+name: Design feedback
+description: Tell me what you'd change about the site or a template
+title: "[Feedback] "
+labels: [feedback]
+body:
+  - type: dropdown
+    id: area
+    attributes:
+      label: What is this about?
+      options:
+        - The main board (siteboardhq.com home)
+        - A specific template
+        - Checkout / buying flow
+        - Mobile layout
+        - Something else
+    validations:
+      required: true
+  - type: input
+    id: url
+    attributes:
+      label: Page or template
+      placeholder: https://siteboardhq.com/templates/...
+  - type: textarea
+    id: what
+    attributes:
+      label: What would you change, and why?
+      description: Be blunt. Screenshots welcome.
+    validations:
+      required: true
+  - type: dropdown
+    id: device
+    attributes:
+      label: Device
+      options: [Desktop, Phone, Tablet]

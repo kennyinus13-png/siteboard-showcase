@@ -1,0 +1,765 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Ledgerly | Business banking for finance teams</title>
+<meta name="description" content="Ledgerly is business banking for companies with a finance team: checking, savings, cards and payments in one account, with approval rules, spend limits and an audit trail.">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='8' fill='%234063e6'/%3E%3Cpath d='M11 9v14h11' fill='none' stroke='white' stroke-width='3' stroke-linecap='square'/%3E%3C/svg%3E">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Figtree:wght@400;500;600&display=swap">
+<style>
+:root {
+  --ink: #0a111e; --ink-in: #0d1525; --ink-bar: #0e1626; --s1: #111a2c; --s2: #162137; --s3: #18243c; --s4: #223050;
+  --hl: rgba(255, 255, 255, .07); --hl-2: rgba(255, 255, 255, .13);
+  --t1: #eef1f6; --t2: #b3bccb; --t3: #8490a4; --t4: #6c788d;
+  --paper: #f5f3ee; --paper-in: #efece5; --card: #ffffff;
+  --d1: #121926; --d2: #4b5464; --d3: #697180; --d4: #969ca7;
+  --dl: rgba(18, 25, 38, .09); --dl-2: rgba(18, 25, 38, .17);
+  --blue: #4063e6; --blue-up: #5475ee; --blue-on-ink: #b9c7ff; --blue-on-paper: #2c4cc4;
+  --green: #63c394; --green-on-paper: #1c7a50; --amber: #e0b25c;
+  --col: calc((100% - 128px) / 3);
+  color-scheme: dark;
+}
+*, *::before, *::after { box-sizing: border-box; }
+html { -webkit-text-size-adjust: 100%; }
+body { margin: 0; background: var(--ink); color: var(--t1); font: 400 16px/26px "Figtree", "Segoe UI", system-ui, sans-serif; -webkit-font-smoothing: antialiased; }
+h1, h2, h3, p, ul, ol, table, address { margin: 0; }
+ul, ol { padding: 0; list-style: none; }
+a { color: inherit; text-decoration: none; }
+b, strong { font-weight: 500; }
+i, address { font-style: normal; }
+button, input { font: inherit; color: inherit; }
+sup { font-size: 12px; line-height: 0; }
+[id] { scroll-margin-top: 92px; }
+:focus-visible { outline: 2px solid #8ea4ff; outline-offset: 2px; }
+.wrap { max-width: 1264px; margin-inline: auto; padding-inline: 32px; }
+h2 { font-size: 30px; line-height: 36px; font-weight: 500; letter-spacing: -.015em; text-wrap: balance; }
+h3 { font-size: 20px; line-height: 28px; font-weight: 500; letter-spacing: -.005em; }
+
+/* buttons and links */
+.btn { display: inline-flex; align-items: center; justify-content: center; height: 40px; padding: 0 16px; border: 0; border-radius: 8px; background: var(--blue); color: #fff; font-size: 16px; font-weight: 500; line-height: 1; white-space: nowrap; cursor: pointer; box-shadow: inset 0 1px 0 rgba(255, 255, 255, .18), 0 1px 2px rgba(3, 6, 14, .4); transition: background-color .15s; }
+.btn:hover { background: var(--blue-up); }
+.btn:active { transform: translateY(1px); }
+.btn.sm { height: 36px; padding: 0 14px; font-size: 14px; }
+.go { display: inline-flex; align-items: center; gap: 6px; font-weight: 500; color: var(--t1); transition: color .15s; }
+.go::after { content: "\2192"; transition: transform .15s; }
+.go:hover { color: var(--blue-on-ink); }
+.go:hover::after { transform: translateX(3px); }
+.light .go { color: var(--d1); }
+.light .go:hover { color: var(--blue-on-paper); }
+
+/* announcement and header */
+.note { padding: 10px 20px; background: #f3f1ea; color: #2a2f3a; font-size: 14px; line-height: 20px; text-align: center; }
+.note a { margin-left: 6px; font-weight: 500; text-decoration: underline; text-decoration-color: rgba(18, 25, 38, .3); text-underline-offset: 3px; white-space: nowrap; }
+.note a:hover { color: var(--blue-on-paper); text-decoration-color: currentColor; }
+.top { position: sticky; top: 0; z-index: 20; background: rgba(10, 17, 30, .86); -webkit-backdrop-filter: saturate(140%) blur(14px); backdrop-filter: saturate(140%) blur(14px); border-bottom: 1px solid var(--hl); }
+.top .wrap { display: flex; align-items: center; gap: 44px; height: 68px; }
+.mark { display: inline-flex; align-items: center; gap: 10px; color: var(--t1); font-size: 20px; font-weight: 600; letter-spacing: -.02em; }
+.top nav { display: flex; gap: 28px; font-size: 14px; font-weight: 500; color: var(--t2); }
+.top nav a, .login { transition: color .15s; }
+.top nav a:hover, .login:hover { color: var(--t1); }
+.top .side { display: flex; align-items: center; gap: 24px; margin-left: auto; }
+.login { font-size: 14px; font-weight: 500; color: var(--t2); white-space: nowrap; }
+
+/* hero */
+.hero { padding: 96px 0 120px; }
+.hero h1 { max-width: 900px; font-size: 50px; line-height: 54px; font-weight: 500; letter-spacing: -.02em; text-wrap: balance; }
+.hero .sub { max-width: 620px; margin-top: 20px; font-size: 20px; line-height: 30px; color: var(--t2); }
+.start { display: flex; flex-wrap: wrap; align-items: center; gap: 16px 28px; margin-top: 36px; }
+.signup { display: flex; gap: 4px; width: 432px; max-width: 100%; padding: 4px; background: rgba(255, 255, 255, .05); border: 1px solid var(--hl-2); border-radius: 12px; box-shadow: inset 0 1px 2px rgba(3, 6, 14, .35); transition: border-color .15s, box-shadow .15s; }
+.signup:focus-within { border-color: #8ea4ff; box-shadow: 0 0 0 3px rgba(142, 164, 255, .22); }
+.signup input { flex: 1; min-width: 0; height: 40px; padding: 0 12px; background: none; border: 0; outline: 0; font-size: 16px; }
+.signup input::placeholder { color: var(--t3); }
+.fine { max-width: 540px; margin-top: 20px; font-size: 12px; line-height: 18px; color: var(--t3); }
+
+/* product mock */
+.ic { flex: none; width: 16px; height: 16px; fill: none; stroke: currentColor; stroke-width: 1.4; stroke-linecap: round; stroke-linejoin: round; }
+.app { margin-top: 72px; font-size: 13px; line-height: 18px; font-variant-numeric: tabular-nums; color: var(--t2); background: var(--s1); border: 1px solid rgba(255, 255, 255, .11); border-radius: 12px; overflow: hidden; box-shadow: 0 1px 2px rgba(2, 5, 12, .45), 0 16px 32px rgba(2, 5, 12, .34); }
+.app b { color: var(--t1); }
+.app-bar { display: flex; align-items: center; gap: 12px; height: 48px; padding: 0 16px; background: var(--ink-bar); border-bottom: 1px solid var(--hl); box-shadow: inset 0 1px 0 rgba(255, 255, 255, .05); }
+.app-org { display: flex; align-items: center; gap: 8px; width: 176px; color: var(--t1); font-weight: 500; white-space: nowrap; }
+.app-org i { display: grid; place-items: center; width: 22px; height: 22px; border-radius: 6px; background: #2b3b5e; box-shadow: inset 0 0 0 1px rgba(255, 255, 255, .1); font-size: 12px; font-weight: 600; }
+.app-org .ic { color: var(--t4); }
+.app-find { display: flex; align-items: center; gap: 8px; flex: 1; max-width: 340px; height: 30px; padding: 0 6px 0 10px; background: var(--ink); border: 1px solid var(--hl); border-radius: 6px; box-shadow: inset 0 1px 2px rgba(0, 0, 0, .3); color: var(--t4); white-space: nowrap; }
+.app-find i { margin-left: auto; padding: 0 6px; border: 1px solid var(--hl-2); border-radius: 4px; font-size: 12px; line-height: 16px; color: var(--t3); }
+.app-do { display: flex; align-items: center; height: 30px; margin-left: auto; padding: 0 12px; background: var(--s4); border: 1px solid rgba(255, 255, 255, .1); border-radius: 6px; box-shadow: inset 0 1px 0 rgba(255, 255, 255, .06), 0 1px 2px rgba(0, 0, 0, .3); color: var(--t1); font-weight: 500; white-space: nowrap; }
+.app-me { display: grid; place-items: center; width: 30px; height: 30px; border-radius: 8px; background: #2a3f3a; box-shadow: inset 0 0 0 1px rgba(255, 255, 255, .1); color: #c9eadb; font-size: 12px; font-weight: 600; }
+.app-body { display: grid; grid-template-columns: 192px minmax(0, 1fr) 300px; }
+.app-side { display: flex; flex-direction: column; gap: 2px; padding: 12px 10px; background: var(--ink-in); border-right: 1px solid var(--hl); }
+.app-nav { display: flex; align-items: center; gap: 10px; height: 32px; padding: 0 10px; border-radius: 6px; font-weight: 500; }
+.app-nav .ic { color: var(--t3); }
+.app-nav.on { background: rgba(255, 255, 255, .06); box-shadow: inset 0 0 0 1px rgba(255, 255, 255, .05); color: var(--t1); }
+.app-nav.on .ic { color: #9fb3ff; }
+.app-nav em { min-width: 20px; margin-left: auto; padding: 0 6px; border-radius: 5px; background: rgba(224, 178, 92, .15); color: #e7c27a; font-style: normal; font-size: 12px; line-height: 18px; text-align: center; }
+.app-sync { margin-top: auto; padding: 12px 10px 4px; border-top: 1px solid var(--hl); font-size: 12px; line-height: 16px; color: var(--t3); }
+.app-sync b { display: flex; align-items: center; gap: 7px; margin-bottom: 2px; color: var(--t2); }
+.dot { flex: none; width: 6px; height: 6px; border-radius: 3px; background: var(--green); }
+.app-main { min-width: 0; padding: 24px; }
+.app-head { display: flex; align-items: flex-end; justify-content: space-between; gap: 24px; }
+.app-label { display: block; font-size: 12px; line-height: 16px; font-weight: 500; color: var(--t3); }
+.app-total { display: block; margin-top: 6px; font-size: 30px; line-height: 36px; font-weight: 500; letter-spacing: -.02em; color: var(--t1); }
+.app-total i { color: var(--t3); }
+.app-delta { display: block; margin-top: 4px; font-size: 12px; line-height: 16px; color: var(--t3); }
+.app-delta b, .app .in { color: var(--green); }
+.app-chart { display: flex; flex-direction: column; align-items: flex-end; gap: 8px; }
+.app-range { display: flex; padding: 2px; background: var(--ink-in); border: 1px solid var(--hl); border-radius: 6px; }
+.app-range i { padding: 1px 8px; border-radius: 4px; font-size: 12px; line-height: 16px; color: var(--t3); }
+.app-range .on { background: var(--s4); box-shadow: 0 1px 2px rgba(0, 0, 0, .3); color: var(--t1); }
+.app-chart svg { display: block; width: 284px; height: 64px; }
+.app-mix { display: flex; gap: 3px; height: 4px; margin: 20px 0 16px; }
+.app-mix i { border-radius: 2px; }
+.c1 { background: #6f8cff; } .c2 { background: #4fb8a8; } .c3 { background: #d9a84e; } .c4 { background: #a58cf5; }
+.w53 { width: 53.2%; } .w17 { width: 17.1%; } .w9 { width: 9%; } .w21 { width: 20.7%; }
+.app-card { background: var(--s2); border: 1px solid var(--hl); border-radius: 10px; box-shadow: 0 1px 2px rgba(2, 5, 12, .3), 0 6px 16px rgba(2, 5, 12, .2); overflow: hidden; }
+.app-card + .app-card { margin-top: 16px; }
+.app-card-h { display: flex; align-items: center; justify-content: space-between; height: 38px; padding: 0 16px; background: rgba(255, 255, 255, .025); border-bottom: 1px solid var(--hl); box-shadow: inset 0 1px 0 rgba(255, 255, 255, .04); font-size: 12px; font-weight: 500; color: var(--t3); }
+.app-acct { display: grid; grid-template-columns: 8px minmax(0, 1fr) auto; align-items: center; gap: 12px; height: 40px; padding: 0 16px; border-top: 1px solid rgba(255, 255, 255, .045); }
+.app-card-h + .app-acct { border-top: 0; }
+.sw { width: 8px; height: 8px; border-radius: 2px; }
+.app-acct .nm { display: flex; align-items: center; gap: 10px; min-width: 0; white-space: nowrap; }
+.app-acct .nm span { font-size: 12px; color: var(--t3); }
+.app-acct .amt { color: var(--t1); }
+.apy { padding: 0 6px; border-radius: 4px; background: rgba(99, 195, 148, .14); color: #7fd1a8; font-size: 12px; line-height: 18px; font-weight: 500; }
+.app-tabs { display: flex; gap: 14px; font-weight: 400; }
+.app-tabs .on { color: var(--t1); }
+.app-tx { width: 100%; border-collapse: collapse; }
+.app-tx th { height: 32px; padding: 0 8px; border-bottom: 1px solid var(--hl); font-size: 12px; font-weight: 500; color: var(--t3); text-align: left; }
+.app-tx td { height: 38px; padding: 0 8px; border-top: 1px solid rgba(255, 255, 255, .045); white-space: nowrap; }
+.app-tx tbody tr:first-child td { border-top: 0; }
+.app-tx tr > :first-child { width: 72px; padding-left: 16px; color: var(--t3); }
+.app-tx tr > :last-child { padding-right: 16px; }
+.app-tx .r { text-align: right; }
+.app-tx td.r { color: var(--t1); }
+.app-tx td.in { color: var(--green); }
+.app-tx .wait td { background: rgba(224, 178, 92, .05); }
+.who { display: flex; align-items: center; gap: 10px; color: var(--t1); font-weight: 500; }
+.who i { display: grid; place-items: center; flex: none; width: 22px; height: 22px; border-radius: 6px; background: rgba(255, 255, 255, .07); box-shadow: inset 0 0 0 1px rgba(255, 255, 255, .06); font-size: 12px; color: var(--t2); }
+.chip { display: inline-block; padding: 0 7px; border-radius: 5px; background: rgba(255, 255, 255, .055); box-shadow: inset 0 0 0 1px rgba(255, 255, 255, .06); font-size: 12px; line-height: 20px; color: var(--t2); white-space: nowrap; }
+.st { display: inline-flex; align-items: center; gap: 7px; font-size: 12px; color: var(--t3); }
+.st::before { content: ""; width: 6px; height: 6px; border-radius: 3px; background: #4d5a72; }
+.st.w { color: #e7c27a; }
+.st.w::before { background: var(--amber); box-shadow: 0 0 0 3px rgba(224, 178, 92, .16); }
+.app-aside { min-width: 0; padding: 20px 16px; background: var(--ink-bar); border-left: 1px solid var(--hl); }
+.app-aside-h { display: flex; align-items: center; justify-content: space-between; margin-bottom: 14px; }
+.tag { padding: 0 7px; border-radius: 5px; background: rgba(224, 178, 92, .14); color: #e7c27a; font-size: 12px; line-height: 20px; font-weight: 500; }
+.app-req { padding: 14px; background: var(--s3); border: 1px solid rgba(255, 255, 255, .09); border-radius: 10px; box-shadow: inset 0 1px 0 rgba(255, 255, 255, .05), 0 1px 2px rgba(2, 5, 12, .35), 0 8px 20px rgba(2, 5, 12, .25); }
+.app-req + .app-req { margin-top: 10px; }
+.app-req-t { display: flex; align-items: center; justify-content: space-between; margin-bottom: 8px; }
+.app-req .by { display: block; margin-top: 2px; font-size: 12px; line-height: 16px; color: var(--t3); }
+.app-req .why { display: flex; align-items: center; gap: 7px; margin-top: 10px; padding: 6px 8px; border-radius: 6px; background: rgba(10, 17, 30, .55); box-shadow: inset 0 0 0 1px rgba(255, 255, 255, .05); font-size: 12px; line-height: 16px; }
+.app-req .why .ic { width: 14px; height: 14px; color: var(--t3); }
+.app-req-a { display: flex; gap: 8px; margin-top: 12px; }
+.app-btn { display: grid; place-items: center; flex: 1; height: 30px; border: 1px solid var(--hl-2); border-radius: 6px; font-weight: 500; }
+.app-btn.pri { background: rgba(142, 164, 255, .16); border-color: rgba(142, 164, 255, .3); box-shadow: inset 0 1px 0 rgba(255, 255, 255, .06); color: #cfd9ff; }
+.app-sec { margin-top: 20px; padding-top: 16px; border-top: 1px solid var(--hl); }
+.app-li { display: flex; justify-content: space-between; gap: 12px; margin-top: 8px; font-size: 12px; line-height: 16px; }
+.app-li span:last-child { color: var(--t3); }
+.bar { height: 4px; margin-top: 6px; border-radius: 2px; background: rgba(255, 255, 255, .08); overflow: hidden; }
+.bar i { display: block; height: 100%; border-radius: 2px; background: #8ea4ff; }
+.p65 { width: 64.8%; } .p59 { width: 59.4%; } .p51 { width: 51.4%; }
+
+/* sections */
+.sec { padding: 120px 0; border-top: 1px solid var(--hl); }
+.light { background: var(--paper); color: var(--d1); border-top-color: var(--dl); color-scheme: light; }
+.sec-h { display: grid; grid-template-columns: var(--col) minmax(0, 1fr); gap: 64px; align-items: start; margin-bottom: 64px; }
+.sec-h h2:only-child { grid-column: 1 / -1; }
+.sec-h p { max-width: 560px; padding-top: 5px; color: var(--t2); }
+.light .sec-h p, .light .lead { color: var(--d2); }
+.split { display: grid; grid-template-columns: var(--col) minmax(0, 1fr); gap: 64px; }
+.lead { margin-top: 16px; color: var(--t2); }
+
+/* what is in the account */
+.cols { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); margin-inline: -32px; }
+.cols > div { padding: 0 32px; border-left: 1px solid var(--hl); }
+.cols > div:first-child { border-left: 0; }
+.cols h3 { margin-top: 36px; }
+.cols p { margin: 8px 0 16px; color: var(--t2); }
+.frag { display: flex; flex-direction: column; height: 244px; font-size: 13px; line-height: 18px; font-variant-numeric: tabular-nums; color: var(--t2); }
+.frag > * { flex: none; }
+.frag b { color: var(--t1); }
+.f-panel { background: var(--s1); border: 1px solid rgba(255, 255, 255, .1); border-radius: 10px; box-shadow: inset 0 1px 0 rgba(255, 255, 255, .04), 0 1px 2px rgba(2, 5, 12, .35), 0 10px 24px rgba(2, 5, 12, .28); overflow: hidden; }
+.f-acct { display: grid; grid-template-columns: 8px minmax(0, 1fr) auto; align-items: center; gap: 12px; padding: 10px 16px; border-top: 1px solid var(--hl); }
+.f-acct:first-child { border-top: 0; }
+.f-acct span { display: block; font-size: 12px; line-height: 16px; color: var(--t3); }
+.f-acct .amt { font-size: 13px; line-height: 18px; color: var(--t1); }
+.f-acct.on { background: var(--s2); box-shadow: inset 2px 0 0 #a58cf5; }
+.f-note { display: flex; justify-content: space-between; padding: 9px 16px 9px 36px; background: var(--s2); border-top: 1px solid rgba(255, 255, 255, .045); font-size: 12px; line-height: 16px; color: var(--t3); }
+.f-note .in { color: var(--green); }
+.f-add { padding: 10px 16px; background: var(--ink-in); border-top: 1px solid var(--hl); font-size: 12px; line-height: 16px; color: var(--t3); }
+.f-deck { display: flex; }
+.plastic { position: relative; flex: none; display: flex; flex-direction: column; width: 196px; height: 124px; padding: 14px; border-radius: 10px; background: #3857cf; box-shadow: inset 0 0 0 1px rgba(255, 255, 255, .16), 0 1px 2px rgba(2, 5, 12, .4), 0 10px 24px rgba(2, 5, 12, .36); color: #fff; overflow: hidden; z-index: 1; }
+.plastic::before { content: ""; position: absolute; left: 60px; top: -80px; width: 120px; height: 300px; background: rgba(255, 255, 255, .07); transform: rotate(34deg); }
+.plastic > * { position: relative; }
+.plastic .pl-b { font-size: 13px; font-weight: 600; letter-spacing: -.01em; }
+.plastic .pl-n { margin-top: auto; font-size: 13px; letter-spacing: .08em; }
+.plastic .pl-w { display: flex; justify-content: space-between; margin-top: 4px; font-size: 12px; line-height: 16px; color: rgba(255, 255, 255, .78); }
+.plastic.back { margin-left: -84px; margin-top: 14px; background: #1b2740; box-shadow: inset 0 0 0 1px rgba(255, 255, 255, .1), 0 1px 2px rgba(2, 5, 12, .4); color: var(--t2); z-index: 0; text-align: right; }
+.plastic.back::before { background: rgba(255, 255, 255, .03); }
+.plastic.back .pl-w { justify-content: flex-end; color: var(--t3); }
+.f-lim { margin-top: 20px; }
+.f-lim > div:first-child { display: flex; justify-content: space-between; }
+.f-lim b i { color: var(--t3); font-weight: 400; }
+.f-tags { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 12px; }
+.f-pay { display: flex; align-items: flex-start; justify-content: space-between; gap: 12px; padding: 14px 16px; background: var(--s2); border-bottom: 1px solid var(--hl); }
+.f-pay span, .chain span { display: block; font-size: 12px; line-height: 16px; color: var(--t3); }
+.chain { display: grid; gap: 14px; padding: 16px; }
+.chain li { position: relative; padding-left: 24px; }
+.chain li::before { content: ""; position: absolute; left: 2px; top: 4px; width: 10px; height: 10px; border-radius: 5px; background: var(--s1); box-shadow: inset 0 0 0 1.5px var(--t4); }
+.chain li::after { content: ""; position: absolute; left: 6.5px; top: 18px; bottom: -14px; width: 1px; background: var(--hl-2); }
+.chain li:last-child::after { display: none; }
+.chain .ok::before { background: var(--green); box-shadow: none; }
+.chain .now::before { background: var(--amber); box-shadow: 0 0 0 3px rgba(224, 178, 92, .18); }
+
+/* approvals and limits */
+.half { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 64px; align-items: start; }
+.rule { background: var(--card); border: 1px solid var(--dl); border-radius: 12px; box-shadow: 0 1px 2px rgba(18, 25, 38, .05), 0 8px 24px rgba(18, 25, 38, .07), 0 24px 48px rgba(18, 25, 38, .05); font-size: 14px; line-height: 20px; color: var(--d2); overflow: hidden; }
+.rule b { color: var(--d1); }
+.rule-h, .rule-f { display: flex; align-items: center; justify-content: space-between; gap: 16px; padding: 14px 20px; background: #fbfaf7; }
+.rule-h { border-bottom: 1px solid var(--dl); }
+.rule-f { padding-block: 12px; border-top: 1px solid var(--dl); font-size: 12px; line-height: 16px; color: var(--d3); }
+.rule-h span { display: inline-flex; align-items: center; gap: 7px; font-size: 12px; color: var(--green-on-paper); font-weight: 500; }
+.rule-h .dot { background: #2a9a68; box-shadow: 0 0 0 3px rgba(42, 154, 104, .16); }
+.rule-b { display: grid; gap: 10px; padding: 20px; }
+.ln { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; }
+.kw { width: 44px; color: var(--d3); }
+.tok { display: inline-flex; align-items: center; gap: 8px; height: 32px; padding: 0 10px; background: var(--card); border: 1px solid var(--dl-2); border-radius: 6px; box-shadow: 0 1px 1px rgba(18, 25, 38, .05); color: var(--d1); font-weight: 500; white-space: nowrap; }
+.tok::after { content: ""; width: 6px; height: 6px; margin-top: -3px; border: solid var(--d4); border-width: 0 1.5px 1.5px 0; transform: rotate(45deg); }
+.tok.val { background: #eef2ff; border-color: rgba(64, 99, 230, .4); color: var(--blue-on-paper); font-variant-numeric: tabular-nums; }
+.tok.val::after { display: none; }
+.tok i { display: grid; place-items: center; width: 20px; height: 20px; margin-left: -4px; border-radius: 5px; background: #dfe9e4; color: #1f5c44; font-size: 12px; font-weight: 600; }
+.then { margin-top: 6px; padding: 12px; border-radius: 8px; background: #f6f4ef; box-shadow: inset 0 0 0 1px var(--dl); }
+.then + .then { margin-top: 0; }
+.rule-add { color: var(--d3); }
+.rule-btn { display: inline-grid; place-items: center; height: 32px; padding: 0 12px; border-radius: 6px; background: var(--d1); box-shadow: inset 0 1px 0 rgba(255, 255, 255, .14), 0 1px 2px rgba(18, 25, 38, .2); color: #fff; font-size: 14px; font-weight: 500; }
+.rules { margin-top: 16px; border-radius: 12px; background: var(--paper-in); box-shadow: inset 0 0 0 1px var(--dl); font-size: 14px; line-height: 20px; }
+.rules li { display: grid; grid-template-columns: 120px minmax(0, 1fr) 30px; align-items: center; gap: 16px; padding: 12px 20px; border-top: 1px solid var(--dl); color: var(--d2); }
+.rules li:first-child { border-top: 0; }
+.rules b { color: var(--d1); }
+.sw-t { position: relative; width: 30px; height: 18px; border-radius: 9px; background: #c9c5ba; box-shadow: inset 0 1px 2px rgba(18, 25, 38, .15); }
+.sw-t::after { content: ""; position: absolute; left: 2px; top: 2px; width: 14px; height: 14px; border-radius: 7px; background: #fff; box-shadow: 0 1px 2px rgba(18, 25, 38, .25); }
+.sw-t.on { background: #2a9a68; }
+.sw-t.on::after { left: 14px; }
+.two { font-size: 20px; line-height: 30px; color: var(--d3); }
+.two strong { font-weight: 400; color: var(--d1); }
+.audit { margin-top: 40px; font-size: 14px; line-height: 22px; font-variant-numeric: tabular-nums; }
+.audit-h { display: flex; justify-content: space-between; padding-bottom: 12px; border-bottom: 1px solid var(--dl-2); color: var(--d3); }
+.audit-h b { color: var(--d1); }
+.audit li { display: grid; grid-template-columns: 128px minmax(0, 1fr); gap: 16px; padding: 14px 0; border-bottom: 1px solid var(--dl); color: var(--d2); }
+.audit time { color: var(--d3); }
+.audit li b { color: var(--d1); }
+.after { margin-top: 20px; font-size: 14px; line-height: 22px; color: var(--d3); }
+
+/* fees */
+.fees { width: 100%; border-collapse: collapse; font-variant-numeric: tabular-nums; }
+.fees th, .fees td { padding: 20px 24px 20px 0; border-bottom: 1px solid var(--dl); text-align: left; vertical-align: top; }
+.fees thead th { padding: 0 0 12px; border-bottom-color: var(--dl-2); font-size: 14px; line-height: 20px; font-weight: 500; color: var(--d3); }
+.fees tbody th { width: 30%; font-weight: 500; }
+.fees .fee { width: 16%; font-weight: 500; }
+.fees td:last-child { padding-right: 0; color: var(--d2); }
+.notes { margin-top: 24px; font-size: 12px; line-height: 18px; color: var(--d3); }
+.notes li + li { margin-top: 6px; }
+
+/* security */
+.plain { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 0 64px; }
+.plain li { padding: 24px 0 40px; border-top: 1px solid var(--hl-2); }
+.plain li:nth-last-child(-n+2) { padding-bottom: 0; }
+.plain h3 { font-size: 16px; line-height: 26px; }
+.plain p { margin-top: 6px; color: var(--t2); }
+.plain p b { color: var(--t1); font-variant-numeric: tabular-nums; white-space: nowrap; }
+
+/* moving */
+.steps { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); }
+.steps li { position: relative; padding: 28px 40px 0 0; border-top: 1px solid var(--dl-2); }
+.steps li::before { content: ""; position: absolute; left: 0; top: -4px; width: 7px; height: 7px; border-radius: 4px; background: var(--d1); }
+.steps span { display: block; font-size: 14px; line-height: 20px; color: var(--d3); font-variant-numeric: tabular-nums; }
+.steps h3 { margin-top: 6px; }
+.steps p { margin-top: 8px; color: var(--d2); }
+
+/* questions */
+.faq details { border-top: 1px solid var(--dl); }
+.faq details:last-child { border-bottom: 1px solid var(--dl); }
+.faq summary { display: flex; justify-content: space-between; gap: 24px; padding: 20px 0; font-weight: 500; cursor: pointer; list-style: none; transition: color .15s; }
+.faq summary::-webkit-details-marker { display: none; }
+.faq summary::after { content: "+"; flex: none; font-size: 20px; line-height: 26px; font-weight: 400; color: var(--d3); }
+.faq details[open] summary::after { content: "\2212"; }
+.faq summary:hover { color: var(--blue-on-paper); }
+.faq details p { max-width: 640px; padding-bottom: 24px; color: var(--d2); }
+
+/* closing and footer */
+.end .wrap { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 24px 48px; }
+.end .start { margin-top: 0; }
+.foot { padding: 72px 0 40px; background: #070c16; border-top: 1px solid var(--hl); color: var(--t2); font-size: 14px; line-height: 22px; }
+.foot-g { display: grid; grid-template-columns: var(--col) minmax(0, 1fr); gap: 64px; }
+.foot-l { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 32px; }
+.foot h3 { margin-bottom: 10px; font-size: 14px; line-height: 22px; letter-spacing: 0; color: var(--t1); }
+.foot li a { display: inline-block; padding: 4px 0; transition: color .15s; }
+.foot li a:hover { color: var(--t1); text-decoration: underline; text-underline-offset: 3px; }
+.foot address { margin-top: 20px; }
+.foot address span { display: block; font-variant-numeric: tabular-nums; }
+.legal { margin-top: 64px; padding-top: 24px; border-top: 1px solid var(--hl); font-size: 12px; line-height: 18px; color: var(--t3); }
+.foot-e { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 8px 24px; margin-top: 16px; font-size: 12px; line-height: 18px; color: var(--t4); }
+
+@media (max-width: 1100px) {
+  .top .wrap { gap: 28px; }
+  .top nav { gap: 20px; }
+  .app-body { grid-template-columns: 184px minmax(0, 1fr); }
+  .app-aside { grid-column: 1 / -1; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px 16px; align-items: start; border-left: 0; border-top: 1px solid var(--hl); }
+  .app-aside-h { grid-column: 1 / -1; margin: 0; }
+  .app-req + .app-req, .app-sec { margin-top: 0; }
+  .app-sec { padding: 4px 0 0; border-top: 0; }
+  .half { gap: 40px; }
+}
+@media (max-width: 900px) {
+  .wrap { padding-inline: 20px; }
+  .top .wrap { flex-wrap: wrap; gap: 0 16px; height: auto; }
+  .mark { height: 56px; }
+  .top nav { order: 3; align-items: center; width: calc(100% + 40px); height: 44px; margin-inline: -20px; padding-inline: 20px; border-top: 1px solid var(--hl); overflow-x: auto; white-space: nowrap; }
+  [id] { scroll-margin-top: 116px; }
+  .sec, .hero { padding-block: 80px; }
+  .hero { padding-top: 64px; }
+  .app { margin-top: 56px; }
+  .sec-h, .split, .half, .foot-g { grid-template-columns: minmax(0, 1fr); gap: 20px; }
+  .sec-h { margin-bottom: 48px; }
+  .sec-h p { padding-top: 0; }
+  .split, .half { gap: 40px; }
+  .cols { grid-template-columns: minmax(0, 1fr); margin-inline: 0; }
+  .cols > div { padding: 48px 0 0; margin-top: 48px; border-left: 0; border-top: 1px solid var(--hl); }
+  .cols > div:first-child { padding-top: 0; margin-top: 0; border-top: 0; }
+  .frag { height: auto; max-width: 420px; }
+  .steps { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 40px 0; }
+  .foot-g { gap: 48px; }
+}
+@media (max-width: 640px) {
+  .hero h1 { font-size: 30px; line-height: 36px; }
+  .hero .sub { font-size: 16px; line-height: 26px; }
+  h2, .two { font-size: 20px; line-height: 28px; }
+  h3 { font-size: 16px; line-height: 26px; }
+  .signup { width: 100%; }
+  .login { display: none; }
+  .app-body, .app-aside { grid-template-columns: minmax(0, 1fr); }
+  .app-side, .app-find, .c-cat, .c-st { display: none; }
+  .app-org { width: auto; }
+  .app-main { padding: 16px; }
+  .app-head { flex-direction: column; align-items: stretch; }
+  .app-chart { align-items: stretch; }
+  .app-range { align-self: flex-start; }
+  .app-chart svg { width: 100%; height: auto; }
+  .app-acct .nm span { display: none; }
+  .app-tx tr > :first-child { width: 60px; }
+  .rules li { grid-template-columns: minmax(0, 1fr) 30px; }
+  .rules li b { grid-column: 1 / -1; margin-bottom: -8px; }
+  .audit li { grid-template-columns: minmax(0, 1fr); gap: 2px; }
+  .fees thead { display: none; }
+  .fees tr { display: grid; grid-template-columns: minmax(0, 1fr) auto; padding: 16px 0; border-bottom: 1px solid var(--dl); }
+  .fees tbody th, .fees td, .fees .fee { width: auto; padding: 0; border: 0; }
+  .fees td:last-child { grid-column: 1 / -1; margin-top: 4px; font-size: 14px; line-height: 22px; }
+  .plain, .steps { grid-template-columns: minmax(0, 1fr); }
+  .plain li:not(:last-child) { padding-bottom: 28px; }
+  .steps { gap: 32px; }
+  .steps li { padding-right: 0; }
+  .foot-l { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+</style>
+<style id="sb-motion">
+/* siteboard scroll reveal: sections fade in once, 12px rise, nothing else. */
+.sb-mo [data-sb-mo] { transition: opacity .45s ease, transform .45s ease; }
+.sb-mo [data-sb-mo]:not(.sb-in) { opacity: 0; transform: translateY(12px); }
+@media (prefers-reduced-motion: reduce) { .sb-mo [data-sb-mo] { transition: none; } .sb-mo [data-sb-mo]:not(.sb-in) { opacity: 1; transform: none; } }
+</style>
+</head>
+<body id="top">
+<div class="note">Savings accounts now earn 3.9% APY, as of October 2026. <a href="#pricing">See the fee table <span aria-hidden="true">&rarr;</span></a></div>
+<header class="top">
+  <div class="wrap">
+    <a class="mark" href="#top"><svg width="22" height="22" viewBox="0 0 22 22" aria-hidden="true"><rect width="22" height="22" rx="6" fill="#4063e6"/><path d="M7.5 6v10h7.5" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="square"/><path d="M11.5 10.5h3.5" fill="none" stroke="#fff" stroke-opacity=".55" stroke-width="2" stroke-linecap="square"/></svg>Ledgerly</a>
+    <nav aria-label="Main">
+      <a href="#products">Products</a>
+      <a href="#controls">Controls</a>
+      <a href="#pricing">Pricing</a>
+      <a href="#security">Security</a>
+      <a href="#company">Company</a>
+    </nav>
+    <div class="side">
+      <a class="login" href="#top">Log in</a>
+      <a class="btn sm" href="#open">Open an account</a>
+    </div>
+  </div>
+</header>
+<main>
+  <section class="hero">
+    <div class="wrap">
+      <h1>Business banking with the controls a finance team needs.</h1>
+      <p class="sub">Checking, savings, cards and payments in one account. Approval rules, spend limits and an audit trail come standard.</p>
+      <div class="start">
+        <form class="signup" id="open" onsubmit="return false">
+          <input type="email" name="email" placeholder="Work email" aria-label="Work email" autocomplete="email">
+          <button class="btn" type="submit">Open an account</button>
+        </form>
+        <a class="go" href="#demo">See the demo account</a>
+      </div>
+      <p class="fine">Ledgerly is a financial technology company, not a bank. Banking services are provided by partner banks, Members FDIC.</p>
+
+      <div class="app" id="demo" role="img" aria-label="The Ledgerly dashboard for Harbor Labs Inc. It shows a total balance of $2,418,306.42 across four accounts, eight recent transactions and two payments waiting for approval.">
+        <div class="app-bar">
+          <span class="app-org"><i>H</i>Harbor Labs Inc.<svg class="ic" viewBox="0 0 16 16"><path d="m5.5 6.5 2.5-2.5 2.5 2.5M5.5 9.5 8 12l2.5-2.5"/></svg></span>
+          <span class="app-find"><svg class="ic" viewBox="0 0 16 16"><circle cx="7" cy="7" r="4.2"/><path d="m10.2 10.2 3 3"/></svg>Search payments, people, cards<i>/</i></span>
+          <span class="app-do">Move money</span>
+          <span class="app-me">PR</span>
+        </div>
+        <div class="app-body">
+          <div class="app-side">
+            <span class="app-nav on"><svg class="ic" viewBox="0 0 16 16"><path d="M2.5 7.2 8 2.8l5.5 4.4V13a.5.5 0 0 1-.5.5H9.8V10H6.2v3.5H3a.5.5 0 0 1-.5-.5z"/></svg>Home</span>
+            <span class="app-nav"><svg class="ic" viewBox="0 0 16 16"><path d="M2 6.2 8 3l6 3.2M3.5 6.5v5M6.5 6.5v5M9.5 6.5v5M12.5 6.5v5M2 13h12"/></svg>Accounts</span>
+            <span class="app-nav"><svg class="ic" viewBox="0 0 16 16"><rect x="2" y="3.5" width="12" height="9" rx="1.5"/><path d="M2 6.5h12M4.5 10H7"/></svg>Cards</span>
+            <span class="app-nav"><svg class="ic" viewBox="0 0 16 16"><path d="M3 5.5h9.5M10 3l2.5 2.5L10 8M13 10.5H3.5M6 8l-2.5 2.5L6 13"/></svg>Payments</span>
+            <span class="app-nav"><svg class="ic" viewBox="0 0 16 16"><circle cx="8" cy="8" r="5.5"/><path d="m5.6 8.2 1.7 1.7 3.2-3.6"/></svg>Approvals<em>2</em></span>
+            <span class="app-nav"><svg class="ic" viewBox="0 0 16 16"><path d="M3.5 2.5h8a1 1 0 0 1 1 1v10h-8a1 1 0 0 1-1-1zM3.5 12.5a1 1 0 0 1 1-1h8M6 5.5h4"/></svg>Accounting</span>
+            <div class="app-sync"><b><i class="dot"></i>QuickBooks synced</b>Today at 6:00 AM</div>
+          </div>
+          <div class="app-main">
+            <div class="app-head">
+              <div>
+                <span class="app-label">Total balance</span>
+                <span class="app-total">$2,418,306<i>.42</i></span>
+                <span class="app-delta"><b>+$86,204.18</b> in the last 30 days</span>
+              </div>
+              <div class="app-chart">
+                <span class="app-range"><i>7d</i><i class="on">30d</i><i>90d</i></span>
+                <svg viewBox="0 0 284 64"><path d="M0 50H284" stroke="rgba(255,255,255,.12)" stroke-dasharray="2 4"/><path d="M0 50 10 48 20 49 30 44 40 45 50 41 60 42 70 38 80 52 90 50 100 46 110 44 120 40 130 41 140 36 150 34 160 35 170 30 180 44 190 42 200 38 210 33 220 30 230 31 240 26 250 22 260 24 270 18 280 14V64H0Z" fill="rgba(142,164,255,.1)"/><path d="M0 50 10 48 20 49 30 44 40 45 50 41 60 42 70 38 80 52 90 50 100 46 110 44 120 40 130 41 140 36 150 34 160 35 170 30 180 44 190 42 200 38 210 33 220 30 230 31 240 26 250 22 260 24 270 18 280 14" fill="none" stroke="#8ea4ff" stroke-width="1.5" stroke-linejoin="round" stroke-linecap="round"/><circle cx="280" cy="14" r="3" fill="#8ea4ff" stroke="#111a2c" stroke-width="1.5"/></svg>
+              </div>
+            </div>
+            <div class="app-mix"><i class="c1 w53"></i><i class="c2 w17"></i><i class="c3 w9"></i><i class="c4 w21"></i></div>
+            <div class="app-card">
+              <div class="app-card-h"><span>Accounts</span><span>Available</span></div>
+              <div class="app-acct"><i class="sw c1"></i><span class="nm"><b>Operating</b><span>Checking &bull;&bull;4821</span></span><span class="amt">$1,286,440.17</span></div>
+              <div class="app-acct"><i class="sw c2"></i><span class="nm"><b>Payroll</b><span>Checking &bull;&bull;7703</span></span><span class="amt">$412,900.00</span></div>
+              <div class="app-acct"><i class="sw c3"></i><span class="nm"><b>Tax reserve</b><span>Checking &bull;&bull;1158</span></span><span class="amt">$218,966.25</span></div>
+              <div class="app-acct"><i class="sw c4"></i><span class="nm"><b>Savings</b><i class="apy">3.9% APY</i><span>&bull;&bull;9034</span></span><span class="amt">$500,000.00</span></div>
+            </div>
+            <div class="app-card">
+              <div class="app-card-h"><span>Recent transactions</span><span class="app-tabs"><i class="on">All</i><i>Money in</i><i>Money out</i></span></div>
+              <table class="app-tx">
+                <thead><tr><th>Date</th><th>Counterparty</th><th class="c-cat">Category</th><th class="c-st">Status</th><th class="r">Amount</th></tr></thead>
+                <tbody>
+                  <tr class="wait"><td>Oct 6</td><td><span class="who"><i>M</i>Meridian Freight LLC</span></td><td class="c-cat"><span class="chip">Vendors</span></td><td class="c-st"><span class="st w">Pending approval</span></td><td class="r">&minus;$18,450.00</td></tr>
+                  <tr><td>Oct 6</td><td><span class="who"><i>L</i>Lumen Co.</span></td><td class="c-cat"><span class="chip">Customer payment</span></td><td class="c-st"><span class="st">Posted</span></td><td class="r in">+$42,000.00</td></tr>
+                  <tr><td>Oct 5</td><td><span class="who"><i>P</i>Payroll, 38 employees</span></td><td class="c-cat"><span class="chip">Payroll</span></td><td class="c-st"><span class="st">Posted</span></td><td class="r">&minus;$184,200.00</td></tr>
+                  <tr><td>Oct 5</td><td><span class="who"><i>C</i>Calder Cloud Services</span></td><td class="c-cat"><span class="chip">Software</span></td><td class="c-st"><span class="st">Posted</span></td><td class="r">&minus;$12,410.55</td></tr>
+                  <tr><td>Oct 2</td><td><span class="who"><i>F</i>Fennel Health Inc.</span></td><td class="c-cat"><span class="chip">Customer payment</span></td><td class="c-st"><span class="st">Posted</span></td><td class="r in">+$27,315.80</td></tr>
+                  <tr><td>Oct 2</td><td><span class="who"><i>O</i>Ostrander &amp; Wills LLP</span></td><td class="c-cat"><span class="chip">Legal</span></td><td class="c-st"><span class="st">Posted</span></td><td class="r">&minus;$6,500.00</td></tr>
+                  <tr><td>Oct 1</td><td><span class="who"><i>A</i>Alameda Street Properties</span></td><td class="c-cat"><span class="chip">Rent</span></td><td class="c-st"><span class="st">Posted</span></td><td class="r">&minus;$9,800.00</td></tr>
+                  <tr><td>Oct 1</td><td><span class="who"><i>C</i>CA Franchise Tax Board</span></td><td class="c-cat"><span class="chip">Taxes</span></td><td class="c-st"><span class="st">Posted</span></td><td class="r">&minus;$31,775.00</td></tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+          <div class="app-aside">
+            <div class="app-aside-h"><b>Approvals</b><span class="tag">2 pending</span></div>
+            <div class="app-req">
+              <div class="app-req-t"><span class="chip">Domestic wire</span><b>$18,450.00</b></div>
+              <b>Meridian Freight LLC</b>
+              <span class="by">Requested by Dana Okafor at 9:14 AM</span>
+              <span class="why"><svg class="ic" viewBox="0 0 16 16"><path d="M8 2.2 3.2 4v3.6c0 3 2 5.2 4.8 6.2 2.8-1 4.8-3.2 4.8-6.2V4z"/></svg>Over $5,000, needs Finance lead</span>
+              <div class="app-req-a"><span class="app-btn pri">Approve</span><span class="app-btn">Review</span></div>
+            </div>
+            <div class="app-req">
+              <div class="app-req-t"><span class="chip">ACH</span><b>$7,920.00</b></div>
+              <b>Brightline Staffing</b>
+              <span class="by">Requested by Marcus Lee yesterday</span>
+              <span class="why"><svg class="ic" viewBox="0 0 16 16"><path d="M8 2.2 3.2 4v3.6c0 3 2 5.2 4.8 6.2 2.8-1 4.8-3.2 4.8-6.2V4z"/></svg>Over $5,000, needs Finance lead</span>
+              <div class="app-req-a"><span class="app-btn pri">Approve</span><span class="app-btn">Review</span></div>
+            </div>
+            <div class="app-sec">
+              <span class="app-label">Approved this week</span>
+              <div class="app-li"><span>Calder Cloud Services</span><span>$12,410.55</span></div>
+              <div class="app-li"><span>Payroll, 38 employees</span><span>$184,200.00</span></div>
+              <div class="app-li"><span>Ostrander &amp; Wills LLP</span><span>$6,500.00</span></div>
+            </div>
+            <div class="app-sec">
+              <span class="app-label">Card limits, October</span>
+              <div class="app-li"><span>Marketing</span><span>$3,240 of $5,000</span></div>
+              <div class="bar"><i class="p65"></i></div>
+              <div class="app-li"><span>Engineering</span><span>$8,912 of $15,000</span></div>
+              <div class="bar"><i class="p59"></i></div>
+              <div class="app-li"><span>Travel</span><span>$1,284 of $2,500</span></div>
+              <div class="bar"><i class="p51"></i></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="sec" id="products">
+    <div class="wrap">
+      <div class="sec-h">
+        <h2>What is in the account</h2>
+        <p>One application opens all of it. Accounts, cards and payments share the same users, the same rules and the same ledger, so nothing has to be reconciled between tools.</p>
+      </div>
+      <div class="cols">
+        <div id="accounts">
+          <div class="frag" role="img" aria-label="Account list with a savings account earning 3.9% APY">
+            <div class="f-panel">
+              <div class="f-acct"><i class="sw c1"></i><div><b>Operating</b><span>Checking &bull;&bull;4821</span></div><span class="amt">$1,286,440.17</span></div>
+              <div class="f-acct"><i class="sw c3"></i><div><b>Tax reserve</b><span>Checking &bull;&bull;1158</span></div><span class="amt">$218,966.25</span></div>
+              <div class="f-acct on"><i class="sw c4"></i><div><b>Savings</b><span>&bull;&bull;9034, 3.9% APY</span></div><span class="amt">$500,000.00</span></div>
+              <div class="f-note"><span>Interest paid Oct 1</span><span class="in">+$1,602.74</span></div>
+              <div class="f-add">+ Open another account</div>
+            </div>
+          </div>
+          <h3>Accounts</h3>
+          <p>Up to 20 checking and savings accounts under one login, each with its own account number. Savings earn 3.9% APY as of October 2026.</p>
+          <a class="go" href="#pricing">See fees and rates</a>
+        </div>
+        <div id="cards">
+          <div class="frag" role="img" aria-label="A virtual card for Dana Okafor with $3,240 spent of a $5,000 monthly limit">
+            <div class="f-deck">
+              <div class="plastic"><span class="pl-b">Ledgerly</span><span class="pl-n">&bull;&bull;&bull;&bull; 6017</span><span class="pl-w"><span>Dana Okafor</span><span>Marketing</span></span></div>
+              <div class="plastic back"><span class="pl-b">Ledgerly</span><span class="pl-n">&bull;&bull;&bull;&bull; 2290</span><span class="pl-w"><span>Travel</span></span></div>
+            </div>
+            <div class="f-lim">
+              <div><span>Spent in October</span><b>$3,240.00 <i>of $5,000.00</i></b></div>
+              <div class="bar"><i class="p65"></i></div>
+              <div class="f-tags"><span class="chip">Advertising only</span><span class="chip">Virtual</span><span class="chip">Resets Nov 1</span></div>
+            </div>
+          </div>
+          <h3>Cards</h3>
+          <p>Virtual cards are issued in seconds and physical cards arrive in 5 business days. Every card has its own monthly limit and can be locked to one merchant category.</p>
+          <a class="go" href="#controls">How limits work</a>
+        </div>
+        <div id="payments">
+          <div class="frag" role="img" aria-label="A domestic wire of $18,450.00 waiting for approval from the Finance lead">
+            <div class="f-panel">
+              <div class="f-pay"><div><b>Meridian Freight LLC</b><span>Domestic wire, fee $0.00</span></div><b>$18,450.00</b></div>
+              <ol class="chain">
+                <li class="ok"><b>Dana Okafor</b> requested<span>Oct 6 at 9:14 AM</span></li>
+                <li class="now"><b>Priya Raman</b>, Finance lead<span>Waiting for approval</span></li>
+                <li>Sent by wire<span>Same day if approved by 2:00 PM PT</span></li>
+              </ol>
+            </div>
+          </div>
+          <h3>Payments</h3>
+          <p>ACH and domestic wires cost $0 and international wires cost $15. Payments over your threshold go to an approver before they leave the account.</p>
+          <a class="go" href="#audit">See the audit trail</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="sec light" id="controls">
+    <div class="wrap">
+      <div class="sec-h"><h2>Approvals and limits, set once</h2></div>
+      <div class="half">
+        <div>
+          <div class="rule" role="img" aria-label="Rule builder. If amount is over $5,000, require approval from Finance lead.">
+            <div class="rule-h"><b>Large payments</b><span><i class="dot"></i>Active</span></div>
+            <div class="rule-b">
+              <div class="ln"><span class="kw">If</span><span class="tok">Amount</span><span>is over</span><span class="tok val">$5,000</span></div>
+              <div class="ln"><span class="kw">and</span><span class="tok">Payment type</span><span>is</span><span class="tok">Wire or ACH</span></div>
+              <div class="ln then"><span class="kw">then</span><span>require approval from</span><span class="tok"><i>PR</i>Finance lead</span></div>
+              <div class="ln then"><span class="kw">over</span><span class="tok val">$50,000</span><span>also require</span><span class="tok">Controller</span></div>
+              <span class="rule-add">+ Add a condition</span>
+            </div>
+            <div class="rule-f"><span>Applies to 14 people and 23 cards</span><span class="rule-btn">Save rule</span></div>
+          </div>
+          <ul class="rules" role="img" aria-label="Other rules: new payees, card limits and weekend wires">
+            <li><b>New payees</b><span>The first payment to a new payee needs the Controller</span><i class="sw-t on"></i></li>
+            <li><b>Card limits</b><span>Marketing cards stop at $5,000 per month</span><i class="sw-t on"></i></li>
+            <li><b>Weekend wires</b><span>Wires created on Saturday or Sunday wait until Monday</span><i class="sw-t"></i></li>
+          </ul>
+        </div>
+        <div>
+          <p class="two"><strong>Write a rule once and every payment follows it.</strong> Anything over the threshold waits for the right person, cards stop at their limit, and each decision is logged with a name and a time.</p>
+          <div class="audit" id="audit">
+            <div class="audit-h"><b>Audit trail</b><span>Harbor Labs Inc.</span></div>
+            <ol>
+              <li><time datetime="2026-10-06T09:14">Oct 6, 9:14 AM</time><span><b>Dana Okafor</b> requested a wire to Meridian Freight LLC for $18,450.00</span></li>
+              <li><time datetime="2026-10-05T15:22">Oct 5, 3:22 PM</time><span><b>Priya Raman</b> approved an ACH payment to Calder Cloud Services for $12,410.55</span></li>
+              <li><time datetime="2026-10-05T10:05">Oct 5, 10:05 AM</time><span><b>Marcus Lee</b> raised the limit on card &bull;&bull;6017 from $3,000 to $5,000</span></li>
+              <li><time datetime="2026-10-01T11:30">Oct 1, 11:30 AM</time><span><b>Priya Raman</b> changed the Large payments threshold from $10,000 to $5,000</span></li>
+              <li><time datetime="2026-09-30T16:18">Sep 30, 4:18 PM</time><span><b>Elena Vargas</b> exported the audit log as CSV</span></li>
+            </ol>
+          </div>
+          <p class="after">Each entry posts to QuickBooks, Xero or NetSuite overnight with the approver and the receipt attached.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="sec light" id="pricing">
+    <div class="wrap split">
+      <div>
+        <h2>Fees</h2>
+        <p class="lead">This is the whole schedule. There is no monthly fee and no minimum balance.</p>
+      </div>
+      <div>
+        <table class="fees">
+          <thead><tr><th scope="col">Service</th><th scope="col">Fee</th><th scope="col">Details</th></tr></thead>
+          <tbody>
+            <tr><th scope="row">Monthly fee</th><td class="fee">$0</td><td>For every account you open, at any balance.</td></tr>
+            <tr><th scope="row">ACH transfer</th><td class="fee">$0</td><td>Incoming and outgoing. Same-day ACH is included when sent by 1:00 PM PT.</td></tr>
+            <tr><th scope="row">Domestic wire</th><td class="fee">$0</td><td>Incoming and outgoing. Sent the same day when approved by 2:00 PM PT.</td></tr>
+            <tr><th scope="row">International wire</th><td class="fee">$15</td><td>Per outgoing wire, in US dollars or 30 other currencies.<sup>1</sup> Incoming international wires are $0.</td></tr>
+            <tr><th scope="row">Card replacement</th><td class="fee">$0</td><td>By standard mail in 5 business days. Two-day courier delivery is $25.</td></tr>
+            <tr id="apy"><th scope="row">Savings APY</th><td class="fee">3.9%</td><td>As of October 2026, paid on the full balance. Rates may change.<sup>2</sup></td></tr>
+          </tbody>
+        </table>
+        <ol class="notes">
+          <li><sup>1</sup> Receiving and intermediary banks may charge their own fees. Currency conversion uses the rate shown before you confirm the wire.</li>
+          <li><sup>2</sup> APY is annual percentage yield. The rate is variable and may change before or after the account is opened. Interest accrues daily and is paid on the first business day of each month.</li>
+        </ol>
+      </div>
+    </div>
+  </section>
+
+  <section class="sec" id="security">
+    <div class="wrap split">
+      <div>
+        <h2>Security</h2>
+        <p class="lead">What we run on our side, and who picks up when something looks wrong.</p>
+      </div>
+      <ul class="plain">
+        <li><h3>2-factor on every login</h3><p>Authenticator app, passkey or hardware key. It cannot be turned off, for any role.</p></li>
+        <li><h3>SOC 2 Type II report on request</h3><p>Audited every year by an independent firm. Ask in the app and the current report arrives under NDA within one business day.</p></li>
+        <li><h3>FDIC insurance through partner banks</h3><p>Deposits are held at partner banks, Members FDIC, and are eligible for FDIC insurance up to the stated limit.</p></li>
+        <li><h3>Dedicated fraud line</h3><p><b>(619) 555-0142</b>, answered 24 hours a day by our own staff. Any admin can freeze a card or a user from the app while on the call.</p></li>
+      </ul>
+    </div>
+  </section>
+
+  <section class="sec light" id="switch">
+    <div class="wrap">
+      <div class="sec-h">
+        <h2>Moving from another bank</h2>
+        <p>Most teams run both banks side by side for one pay cycle, then close the old account once the last check has cleared.</p>
+      </div>
+      <ol class="steps">
+        <li><span>10 minutes</span><h3>Apply</h3><p>Company details, each owner with 25% or more, and a photo ID for the person applying.</p></li>
+        <li><span>1 to 2 business days</span><h3>Review</h3><p>We verify the business and email your account and routing numbers.</p></li>
+        <li><span>Same day by wire</span><h3>Fund</h3><p>Send an opening balance by wire or ACH. Any amount is fine.</p></li>
+        <li><span>One pay cycle</span><h3>Switch payroll</h3><p>Point payroll and recurring vendor payments at the new account. We give you a checklist of 12 items.</p></li>
+      </ol>
+    </div>
+  </section>
+
+  <section class="sec light" id="faq">
+    <div class="wrap split">
+      <div>
+        <h2>Questions</h2>
+        <p class="lead">For anything else, call (619) 555-0138 on weekdays between 6:00 AM and 6:00 PM PT.</p>
+      </div>
+      <div class="faq">
+        <details name="faq" open>
+          <summary>Is Ledgerly a bank?</summary>
+          <p>No. Ledgerly is a financial technology company. Your deposits are held at partner banks, Members FDIC, and the account and routing numbers you receive belong to those banks.</p>
+        </details>
+        <details name="faq">
+          <summary>What does an account cost?</summary>
+          <p>There is no monthly fee and no minimum balance. ACH and domestic wires are $0, and an outgoing international wire is $15. The full table is under Fees.</p>
+        </details>
+        <details name="faq">
+          <summary>How is the 3.9% APY paid?</summary>
+          <p>Interest accrues daily on the full savings balance and is paid on the first business day of each month. The rate is 3.9% APY as of October 2026 and rates may change.</p>
+        </details>
+        <details name="faq" id="sync">
+          <summary>Which accounting software does it sync with?</summary>
+          <p>QuickBooks, Xero and NetSuite. Transactions post overnight with the category, the receipt and the name of the approver attached.</p>
+        </details>
+        <details name="faq">
+          <summary>Who can approve a payment?</summary>
+          <p>Anyone you give the approver role. Rules can depend on the amount, the payment type and the account, and a requester can never approve their own payment.</p>
+        </details>
+      </div>
+    </div>
+  </section>
+
+  <section class="sec end">
+    <div class="wrap">
+      <h2>Open an account in about 10 minutes.</h2>
+      <div class="start">
+        <a class="btn" href="#open">Open an account</a>
+        <a class="go" href="#demo">See the demo account</a>
+      </div>
+    </div>
+  </section>
+</main>
+<footer class="foot" id="company">
+  <div class="wrap">
+    <div class="foot-g">
+      <div id="contact">
+        <a class="mark" href="#top"><svg width="22" height="22" viewBox="0 0 22 22" aria-hidden="true"><rect width="22" height="22" rx="6" fill="#4063e6"/><path d="M7.5 6v10h7.5" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="square"/><path d="M11.5 10.5h3.5" fill="none" stroke="#fff" stroke-opacity=".55" stroke-width="2" stroke-linecap="square"/></svg>Ledgerly</a>
+        <address>
+          <span>1264 Alameda Street, San Diego, CA 92101</span>
+          <span>(619) 555-0138</span>
+        </address>
+      </div>
+      <div class="foot-l">
+        <div>
+          <h3>Products</h3>
+          <ul>
+            <li><a href="#accounts">Checking</a></li>
+            <li><a href="#accounts">Savings</a></li>
+            <li><a href="#cards">Cards</a></li>
+            <li><a href="#payments">Payments</a></li>
+            <li><a href="#demo">Demo account</a></li>
+          </ul>
+        </div>
+        <div>
+          <h3>Controls</h3>
+          <ul>
+            <li><a href="#controls">Approval rules</a></li>
+            <li><a href="#cards">Card limits</a></li>
+            <li><a href="#audit">Audit trail</a></li>
+            <li><a href="#sync">Accounting sync</a></li>
+          </ul>
+        </div>
+        <div>
+          <h3>Pricing</h3>
+          <ul>
+            <li><a href="#pricing">Fee table</a></li>
+            <li><a href="#apy">Savings rate</a></li>
+            <li><a href="#switch">Moving your bank</a></li>
+          </ul>
+        </div>
+        <div>
+          <h3>Company</h3>
+          <ul>
+            <li><a href="#security">Security</a></li>
+            <li><a href="#faq">Questions</a></li>
+            <li><a href="#contact">Contact</a></li>
+            <li><a href="#top">Log in</a></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+    <p class="legal">Ledgerly is a financial technology company, not a bank. Banking services are provided by partner banks, Members FDIC. Deposits are eligible for FDIC insurance up to the stated limit per depositor at each partner bank once the funds arrive there. FDIC insurance covers the failure of an insured bank and does not cover the failure of Ledgerly. Ledgerly cards are issued by partner banks under license from the card network and can be used wherever that network is accepted. The savings rate of 3.9% APY is accurate as of October 2026, is variable and may change before or after an account is opened. Fees listed are those charged by Ledgerly. Other banks involved in a transfer may charge their own.</p>
+    <div class="foot-e"><span>&copy; 2026 Ledgerly, Inc.</span><span>NMLS and state license details are available on request.</span></div>
+  </div>
+</footer>
+<script id="sb-motion">
+(() => {
+  if (matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+  const secs = [...document.querySelectorAll("main section, main > div, body > section, body > div.hero, .sec, body > main > *")].filter((e) => e.children.length && !e.closest("header, footer, nav, dialog, [popover]"));
+  if (!secs.length) secs.push(...[...document.body.children].filter((e) => e.children.length && !e.matches("header, footer, nav, script, style, link, dialog, [popover]")));
+  if (!secs.length) return;
+  const near = (e) => e.getBoundingClientRect().top < innerHeight * .92;
+  const start = () => {
+    secs.forEach((e) => e.setAttribute("data-sb-mo", ""));
+    document.documentElement.classList.add("sb-mo");
+    void document.body.offsetWidth;
+    const reveal = (e) => e.classList.add("sb-in");
+    secs.filter(near).forEach(reveal);
+    const rest = () => secs.filter((e) => !e.classList.contains("sb-in"));
+    if ("IntersectionObserver" in window) {
+      const io = new IntersectionObserver((xs) => xs.forEach((x) => { if (x.isIntersecting) { reveal(x.target); io.unobserve(x.target); } }), { rootMargin: "0px 0px -8% 0px" });
+      rest().forEach((e) => io.observe(e));
+    }
+    const sweep = () => rest().filter(near).forEach(reveal);
+    addEventListener("scroll", sweep, { passive: true }); addEventListener("resize", sweep);
+    setTimeout(sweep, 1500); setTimeout(() => rest().forEach(reveal), 6000);
+  };
+  document.hidden ? addEventListener("visibilitychange", function f() { if (!document.hidden) { removeEventListener("visibilitychange", f); start(); } }) : start();
+})();
+</script>
+</body>
+</html>
